@@ -45,16 +45,16 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
       ? whole.geometry.coordinates.map((c) => ({ type: 'Feature', geometry: { type: 'Polygon', coordinates: c } }))
       : [whole]
     const g = Globe()(el.current)
-      .backgroundColor('#f3eee4')
+      .backgroundColor('#050912')
       .showAtmosphere(true)
-      .atmosphereColor('#8fb8b2')
+      .atmosphereColor('#22d3ee')
       .atmosphereAltitude(0.2)
       .polygonsData(countries)
-      .polygonCapColor(() => 'rgba(214,201,172,0.95)')
-      .polygonSideColor(() => 'rgba(140,125,95,0.25)')
-      .polygonStrokeColor(() => 'rgba(120,105,80,0.55)')
+      .polygonCapColor(() => 'rgba(52,92,170,0.62)')
+      .polygonSideColor(() => 'rgba(34,211,238,0.10)')
+      .polygonStrokeColor(() => 'rgba(120,190,255,0.55)')
       .polygonAltitude(0.004)
-      .pointLat('lat').pointLng('lng').pointAltitude('alt').pointRadius('r').pointColor('color').pointResolution(14)
+      .pointLat('lat').pointLng('lng').pointAltitude('alt').pointRadius('r').pointColor('color').pointResolution(10)
       .pointLabel((d) => d.label)
       .onPointClick((d) => {
         if (d.kind === 'ring') s.p.onAlertClick && s.p.onAlertClick(d.ai)
@@ -65,9 +65,9 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
       .arcDashLength(0.35).arcDashGap(0.2).arcDashAnimateTime(1500)
       .ringLat('lat').ringLng('lng').ringColor((d) => (tt) => hexA(d.color, 1 - tt)).ringMaxRadius(7).ringPropagationSpeed(5).ringRepeatPeriod(0)
     const mat = g.globeMaterial()
-    mat.color.set('#cfdcd8')
-    mat.emissive.set('#a9bcb7')
-    mat.emissiveIntensity = 0.35
+    mat.color.set('#0a1530')
+    mat.emissive.set('#06102a')
+    mat.emissiveIntensity = 0.7
     g.pointOfView({ lat: 22, lng: 40, altitude: 2.25 }, 0)
     const c = g.controls()
     c.autoRotate = props.orbit !== false
@@ -110,9 +110,9 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
         const l = locOf(s, a.id)
         const base = typ(a.typ).color
         const col = p.showTruth ? (a.hit ? COLORS.green : COLORS.red) : base
-        return { kind: 'ring', ai: i, lat: l.lat, lng: l.lng, alt: 0.01 + (a.score / 100) * 0.03 + (selAi === i ? 0.02 : 0), r: 0.5 + (a.score / 100) * 0.45 + (selAi === i ? 0.3 : 0),
-          color: sel && selAi !== i ? hexA(col, 0.3) : col,
-          label: `<div class="graph-tooltip"><b style="color:${base}">${typ(a.typ).label}</b> · ${a.id}<br/>risk ${a.score.toFixed(0)} · ${a.n} accounts<br/><span style="color:#92816a">click to open the case file</span></div>` }
+        return { kind: 'ring', ai: i, lat: l.lat, lng: l.lng, alt: 0.004 + (a.score / 100) * 0.018 + (selAi === i ? 0.02 : 0), r: 0.28 + (a.score / 100) * 0.3 + (selAi === i ? 0.3 : 0),
+          color: sel && selAi !== i ? hexA(col, 0.25) : col,
+          label: `<div class="graph-tooltip"><b style="color:${base}">${typ(a.typ).label}</b> · ${a.id}<br/>risk ${a.score.toFixed(0)} · ${a.n} accounts<br/><span style="color:#6f7f9f">click to open the case file</span></div>` }
       })
       missed.forEach((r) => {
         const l = locOf(s, r.id)
@@ -129,8 +129,8 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
           const lat = c.lat + Math.sin(ang) * rad, lng = c.lng + Math.cos(ang) * rad / Math.max(0.35, Math.cos(c.lat * 0.01745))
           pos.set(idx, { lat, lng })
           const n = board.nodes[idx]
-          pts.push({ kind: 'acct', id: n.id, ai: selAi, lat, lng, alt: 0.012, r: 0.2, color: n.k === 'd' ? '#b5703f' : '#4f6d7a',
-            label: `<div class="graph-tooltip"><b>${n.id}</b><br/>${n.k === 'd' ? 'trading account' : 'bank account'}<br/><span style="color:#92816a">click to trace the money</span></div>` })
+          pts.push({ kind: 'acct', id: n.id, ai: selAi, lat, lng, alt: 0.012, r: 0.2, color: n.k === 'd' ? '#a58cf0' : '#7fb0ff',
+            label: `<div class="graph-tooltip"><b>${n.id}</b><br/>${n.k === 'd' ? 'trading account' : 'bank account'}<br/><span style="color:#6f7f9f">click to trace the money</span></div>` })
         })
         const agg = new Map()
         board.events.forEach((e) => {

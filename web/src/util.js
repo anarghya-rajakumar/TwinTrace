@@ -1,19 +1,19 @@
 export const TYP = {
-  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#e0561f', glyph: '⇶' },
-  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#d99a00', glyph: '⇉' },
-  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#a8861a', glyph: '⇉' },
-  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#c2185b', glyph: '↻' },
-  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#d32f2f', glyph: '⛓' },
-  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#6a3fa0', glyph: '⟳' },
-  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#0f7b8a', glyph: '⇅' },
-  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#2f5fa8', glyph: '⛛' },
-  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#6b6258', glyph: '◇' },
+  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#ff8a4c', glyph: '⇶' },
+  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#ffc233', glyph: '⇉' },
+  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#ffd978', glyph: '⇉' },
+  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#ff4d8d', glyph: '↻' },
+  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#ff3b5c', glyph: '⛓' },
+  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#a78bfa', glyph: '⟳' },
+  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#d28bff', glyph: '⇅' },
+  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#22d3ee', glyph: '⛛' },
+  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#94a3b8', glyph: '◇' },
 }
 export const typ = (k) => TYP[k] || TYP.unclassified_anomaly
 
 export const COLORS = {
-  bank: '#4f6d7a', demat: '#b5703f', bankDim: '#b9c6cb', crematDim: '#dcc3ae', amber: '#d1901a', green: '#25bb80',
-  red: '#d1304b', cyan: '#2f7a74', ink: '#393329', muted: '#8a7a63',
+  bank: '#4c78c9', demat: '#8b6fe0', bankDim: '#2c3f66', crematDim: '#40336b', amber: '#ffb020', green: '#2ee59d',
+  red: '#ff3b5c', cyan: '#22d3ee', ink: '#d6e0f5', muted: '#6f7f9f',
 }
 
 export const inr = (x) => {
@@ -41,3 +41,5 @@ export const highlightNumbers = (s) =>
   s.split(/(INR [\d.,]+(?:L|Cr)?|\d[\d,]*(?:\.\d+)?%?)/g).map((p, i) => ({ t: p, num: i % 2 === 1 }))
 
 export const clamp = (x, a, b) => Math.max(a, Math.min(b, x))
+
+export const DK = () => document.documentElement.dataset.theme === 'dark'

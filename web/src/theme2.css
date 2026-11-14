@@ -115,6 +115,14 @@ body { background: var(--bg); color: var(--ink); }
 .app2 .btn.primary, .app2 .rail-badge, .app2 .chat-fab { color: #fbf8f1; }
 .app2 .btn.primary { background: #2f7a74; }
 
-/* dark mode: the whole palette is warm, so inverting lightness and turning the hue back keeps every colour in its family */
-html[data-theme='dark'] { filter: invert(0.92) hue-rotate(180deg); background: #fff; }
-html[data-theme='dark'] img, html[data-theme='dark'] video { filter: invert(1) hue-rotate(180deg); }
+
+/* the graph area (globe + 2D board) keeps the original dark look in both modes */
+.app2 .board-wrap { background: radial-gradient(1200px 700px at 50% 40%, #0b1530 0%, #050912 70%); }
+.app2 .board-wrap::before { display: block; content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%); }
+.app2 .hero { color: #e4e9f5; }
+.app2 .hero-eyebrow, .app2 .hero h1 em { color: #7ee8fa; }
+.app2 .hero h1 { text-shadow: 0 2px 30px rgba(0, 0, 0, 0.8); }
+.app2 .hero-stats span { color: #9fb0d6; }
+.app2 .hero .btn.ghost { color: #d6e0f5; border-color: rgba(214, 224, 245, 0.35); }
+.app2 .cta .btn.ghost { background: rgba(5, 9, 18, 0.7); color: #d6e0f5; border-color: rgba(214, 224, 245, 0.35); }
+.app2 .globe-note, .app2 .loader { color: #9fb0d6; }
