@@ -30,7 +30,7 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
     window.addEventListener('pointerup', up)
   }
   const sp = board.splits
-  const zones = [['TUNE · model learns', sp.tune, '#1b3a63'], ['VAL', sp.val, '#3a2d63'], ['TEST · never seen', sp.test, '#13524b']]
+  const zones = [['TUNE · model learns', sp.tune, '#4f6d7a'], ['VAL', sp.val, '#bdb3a4'], ['TEST · never seen', sp.test, '#cbc3b8']]
   return (
     <div className="tl">
       <div className="tl-ctrl">
@@ -45,17 +45,17 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
           {zones.map(([l, [a, b], c]) => (
             <g key={l}>
               <rect x={x(a)} y={0} width={x(b) - x(a)} height={H} fill={c} opacity={0.35} />
-              <text x={x(a) + 6} y={11} fill="#8ea2c9" fontSize="9" fontFamily="monospace" opacity={0.9}>{l}</text>
+              <text x={x(a) + 6} y={11} fill="#706351" fontSize="9" fontFamily="monospace" opacity={0.9}>{l}</text>
             </g>
           ))}
           {bins.map((v, i) => (
-            <rect key={i} x={(i / bins.length) * W} y={H - 4 - v * 30} width={W / bins.length - 1} height={v * 30} fill="#3d5a94" opacity={0.75} />
+            <rect key={i} x={(i / bins.length) * W} y={H - 4 - v * 30} width={W / bins.length - 1} height={v * 30} fill="#a79986" opacity={0.75} />
           ))}
           {ticks.map((a) => (
             <rect key={a.id} x={x(a.t1) - 0.8} y={16} width={1.6} height={8 + (a.score / 100) * 10} fill={typ(a.typ).color} opacity={a.t1 <= t ? 1 : 0.35} />
           ))}
-          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#4fb3a9" strokeWidth="2" />
-          <circle cx={x(t)} cy={H - 6} r="6" fill="#4fb3a9" stroke="#101214" strokeWidth="2" />
+          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#5d6b2f" strokeWidth="2" />
+          <circle cx={x(t)} cy={H - 6} r="6" fill="#5d6b2f" stroke="#e1ddd6" strokeWidth="2" />
         </svg>
       </div>
       <div className="speed">

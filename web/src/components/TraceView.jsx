@@ -36,13 +36,13 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
 
   useEffect(() => {
     const g = ForceGraph()(el.current)
-      .backgroundColor('rgba(0,0,0,0)')
+      .backgroundColor('rgba(237, 235, 231, 0)')
       .nodeId('id')
       .nodeRelSize(5)
-      .nodeLabel((n) => `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${n.alerts.length ? '<br/><span style="color:#ff8aa0">⚑ ' + n.alerts.join(', ') + '</span>' : ''}<br/><span style="color:#6f7f9f">click to follow from here</span>`)
+      .nodeLabel((n) => `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${n.alerts.length ? '<br/><span style="color:#d17183">⚑ ' + n.alerts.join(', ') + '</span>' : ''}<br/><span style="color:#92816a">click to follow from here</span>`)
       .nodeCanvasObject((n, ctx, gs) => draw(n, ctx, gs, dataRef.current && dataRef.current.origin))
       .nodePointerAreaPaint((n, color, ctx) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(n.x, n.y, 11, 0, 6.2832); ctx.fill() })
-      .linkColor((l) => (l.kind === 'trade' ? hexA('#a78bfa', 0.55) : l.kind === 'owner' ? hexA('#9fb0d6', 0.5) : hexA('#4fb3a9', 0.55)))
+      .linkColor((l) => (l.kind === 'trade' ? hexA('#b5703f', 0.55) : l.kind === 'owner' ? hexA('#635747', 0.5) : hexA('#5d6b2f', 0.55)))
       .linkWidth((l) => (l.kind === 'owner' ? 1 : 1 + Math.log10(l.amount + 10) / 2.6))
       .linkLineDash((l) => (l.kind === 'trade' ? [4, 3] : l.kind === 'owner' ? [1, 3] : null))
       .linkDirectionalArrowLength(6)
@@ -63,7 +63,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
             const y = l.source.y + (l.target.y - l.source.y) * p
             ctx.beginPath()
             ctx.arc(x, y, 1.9, 0, 6.2832)
-            ctx.fillStyle = l.kind === 'trade' ? '#c4b5fd' : '#7ee8fa'
+            ctx.fillStyle = l.kind === 'trade' ? '#b5703f' : '#5d6b2f'
             ctx.shadowColor = ctx.fillStyle
             ctx.shadowBlur = 8
             ctx.fill()
@@ -118,7 +118,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
   const Row = ({ n }) => (
     <button className={'node-row' + (n.alerts.length ? ' flag' : '')} onClick={() => n.id !== cur && setStack((s) => [...s, n.id])}>
       {n.k === 'd' ? '◆' : '●'} {n.id} <span style={{ color: 'var(--muted)' }}>· hop {n.dist}</span>
-      {n.alerts.length > 0 && <span style={{ color: '#ff8aa0' }}> ⚑ {n.alerts.length}</span>}
+      {n.alerts.length > 0 && <span style={{ color: '#d17183' }}> ⚑ {n.alerts.length}</span>}
     </button>
   )
   return (
@@ -130,7 +130,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
             {stack.map((s, i) => (
               <React.Fragment key={i}>
                 {i > 0 && <span>›</span>}
-                <button style={{ color: i === stack.length - 1 ? '#4fb3a9' : undefined }} onClick={() => setStack(stack.slice(0, i + 1))}>{short(s)}</button>
+                <button style={{ color: i === stack.length - 1 ? '#5d6b2f' : undefined }} onClick={() => setStack(stack.slice(0, i + 1))}>{short(s)}</button>
               </React.Fragment>
             ))}
           </div>
@@ -154,12 +154,12 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
       </div>
       <div className="trace-side">
         <h4 style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)' }}>Tracing</h4>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 15, color: '#4fb3a9', wordBreak: 'break-all' }}>{cur}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 15, color: '#5d6b2f', wordBreak: 'break-all' }}>{cur}</div>
         {data && (
           <div className="kv" style={{ margin: '12px 0' }}>
             <div><span>upstream</span><b>{data.reach.up}</b></div>
             <div><span>downstream</span><b>{data.reach.down}</b></div>
-            <div style={{ gridColumn: '1 / 3' }}><span>flagged by TwinTrace</span><b style={{ color: data.reach.flagged ? '#ff8aa0' : undefined }}>{data.reach.flagged} accounts</b></div>
+            <div style={{ gridColumn: '1 / 3' }}><span>flagged by TwinTrace</span><b style={{ color: data.reach.flagged ? '#d17183' : undefined }}>{data.reach.flagged} accounts</b></div>
           </div>
         )}
         {data && data.nodes.find((n) => n.id === cur) && data.nodes.find((n) => n.id === cur).alerts.map((a) => (
@@ -177,7 +177,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
 function draw(n, ctx, gs, origin) {
   const flagged = n.alerts.length > 0
   const isO = n.id === origin
-  const col = isO ? '#4fb3a9' : flagged ? '#ff3b5c' : n.k === 'b' ? '#5b8bea' : '#a58cf0'
+  const col = isO ? '#5d6b2f' : flagged ? '#d1304b' : n.k === 'b' ? '#4f6d7a' : '#b5703f'
   const r = isO ? 8.5 : flagged ? 6.5 : 5
   ctx.save()
   if (isO || flagged) {
@@ -196,12 +196,12 @@ function draw(n, ctx, gs, origin) {
   ctx.fill()
   ctx.shadowBlur = 0
   ctx.lineWidth = 1.5
-  ctx.strokeStyle = '#101214'
+  ctx.strokeStyle = '#e1ddd6'
   ctx.stroke()
   if (isO || flagged || n.dist <= 1 || gs > 1.6) {
     ctx.font = `${isO ? 5.2 : 4.2}px JetBrains Mono, monospace`
     ctx.textAlign = 'center'
-    ctx.fillStyle = isO ? '#4fb3a9' : 'rgba(214,224,245,0.85)'
+    ctx.fillStyle = isO ? '#5d6b2f' : 'rgba(79, 109, 122, 0.85)'
     ctx.fillText(short(n.id), n.x, n.y + r + 8)
   }
   ctx.restore()

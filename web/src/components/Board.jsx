@@ -21,8 +21,8 @@ function sprite(col) {
   }
   return c
 }
-const DIM_BANK = '#33497a'
-const DIM_DEMAT = '#4d3f8c'
+const DIM_BANK = '#b3a797'
+const DIM_DEMAT = '#a99c89'
 
 /** The investigation board: every account as a node, every transfer/trade as a timed edge. Imperative canvas. */
 const Board = forwardRef(function Board(props, ref) {
@@ -45,14 +45,14 @@ const Board = forwardRef(function Board(props, ref) {
   useEffect(() => {
     const s = S.current
     const g = ForceGraph()(el.current)
-      .backgroundColor('rgba(0,0,0,0)')
+      .backgroundColor('rgba(237, 235, 231, 0)')
       .nodeId('idx')
       .nodeRelSize(2.4)
       .nodeVal((n) => (n.alerts.length ? 2.2 : 0.7))
       .nodeLabel((n) => {
         const al = n.alerts.map((i) => s.p.board.alerts[i]).filter((a) => a.score >= s.p.thr[a.grp])
         const lines = al.slice(0, 3).map((a) => `<span style="color:${typ(a.typ).color}">● ${a.id} ${typ(a.typ).label}</span>`)
-        return `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${lines.length ? '<br/>' + lines.join('<br/>') : ''}<br/><span style="color:#6f7f9f">click to trace the money</span>`
+        return `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${lines.length ? '<br/>' + lines.join('<br/>') : ''}<br/><span style="color:#92816a">click to trace the money</span>`
       })
       .nodeVisibility((n) => visibleNode(s, n))
       .nodeColor((n) => nodeColor(s, n))
@@ -260,9 +260,9 @@ function linkColor(s, l) {
     const r = s.p.board.rings[l.ri]
     if (!r.det.some((ai) => alertShown(s, ai))) return hexA(COLORS.amber, 0.7 * k)
   }
-  if (l.kind === 2) return hexA('#9fb0d6', 0.28 * k)
-  if (l.kind === 1) return hexA('#8b6fe0', 0.3 * k)
-  return hexA('#5a79b5', 0.22 * k)
+  if (l.kind === 2) return hexA('#635747', 0.28 * k)
+  if (l.kind === 1) return hexA('#b5703f', 0.3 * k)
+  return hexA('#92816a', 0.22 * k)
 }
 function drawNode(s, n, ctx, gs) {
   const bi = bestAlert(s, n)
@@ -271,7 +271,7 @@ function drawNode(s, n, ctx, gs) {
   const sel = s.p.focusSet && s.p.focusSet.has(n.idx)
   ctx.save()
   ctx.globalAlpha = dim ? 0.22 : 1
-  let col = n.k === 'b' ? '#6c93e0' : '#a58cf0'
+  let col = n.k === 'b' ? '#4f6d7a' : '#b5703f'
   let r = 2.6
   let a = null
   if (bi >= 0) {
@@ -322,7 +322,7 @@ function drawNode(s, n, ctx, gs) {
   }
   if (gs > 3.2 && (a || sel)) {
     ctx.font = `${9 / Math.min(gs, 7) + 2.5}px JetBrains Mono, monospace`
-    ctx.fillStyle = 'rgba(214,224,245,0.9)'
+    ctx.fillStyle = 'rgba(79, 109, 122, 0.9)'
     ctx.textAlign = 'center'
     ctx.fillText(short(n.id), n.x, n.y + r + 6)
   }
@@ -356,7 +356,7 @@ function post(s, ctx, gs) {
     const l = links[i]
     if (l.kind === 2 || l.source.x === undefined || !linkVisible(s, l) || !activeLink(s, l, t)) continue
     const alerty = l.ai >= 0 && alertShown(s, l.ai)
-    const col = alerty ? typ(s.p.board.alerts[l.ai].typ).color : l.kind === 1 ? '#a78bfa' : '#8fd8ff'
+    const col = alerty ? typ(s.p.board.alerts[l.ai].typ).color : l.kind === 1 ? '#b5703f' : '#4f6d7a'
     for (let k = 0; k < 2; k++) {
       const p = ((now / 1000) * 0.55 + l.seed + k * 0.5) % 1
       const [x, y] = lerpPt(l, p)

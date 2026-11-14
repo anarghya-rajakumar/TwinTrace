@@ -325,16 +325,16 @@ export default function App() {
           <div className="legend">
             {view3d ? (
               <>
-                <div><i style={{ background: '#ff3b5c' }} /> one point = one flagged ring (colour = crime type)</div>
+                <div><i style={{ background: '#d1304b' }} /> one point = one flagged ring (colour = crime type)</div>
                 <div>drag to spin · click a point to open it</div>
               </>
             ) : (
               <>
-                <div><i style={{ background: '#6c93e0' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
-                <div><i style={{ background: '#ff3b5c' }} /> flagged ring (colour = typology)</div>
+                <div><i style={{ background: '#4f6d7a' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
+                <div><i style={{ background: '#d1304b' }} /> flagged ring (colour = typology)</div>
               </>
             )}
-            {showTruth && <div><i style={{ background: 'transparent', border: '1.5px solid #2ee59d' }} /> real ring <i style={{ background: 'transparent', border: '1.5px dashed #ff3b5c', marginLeft: 8 }} /> false alarm <i style={{ background: 'transparent', border: '1.5px dashed #ffb020', marginLeft: 8 }} /> missed</div>}
+            {showTruth && <div><i style={{ background: 'transparent', border: '1.5px solid #25bb80' }} /> real ring <i style={{ background: 'transparent', border: '1.5px dashed #d1304b', marginLeft: 8 }} /> false alarm <i style={{ background: 'transparent', border: '1.5px dashed #d1901a', marginLeft: 8 }} /> missed</div>}
             <div>click any account to trace its money</div>
           </div>
 

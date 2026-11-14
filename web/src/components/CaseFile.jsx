@@ -13,7 +13,7 @@ function Gauge({ value, color }) {
   return (
     <div className="gauge">
       <svg width="84" height="84" viewBox="0 0 84 84">
-        <circle cx="42" cy="42" r={R} fill="none" stroke="#14223c" strokeWidth="8" />
+        <circle cx="42" cy="42" r={R} fill="none" stroke="#d2cbc2" strokeWidth="8" />
         <circle cx="42" cy="42" r={R} fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeDasharray={C}
           strokeDashoffset={C * (1 - v / 100)} style={{ transition: 'stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)', filter: `drop-shadow(0 0 6px ${color})` }} />
       </svg>
@@ -50,7 +50,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
     return m
   }, [events])
   const cur = events[Math.min(step, events.length) - 1]
-  const roleStyle = { entry: ['#4fb3a9', 'diamond'], exit: ['#ff3b5c', 'square'], internal: [color, 'circle'], ext_in: ['#5b6b8c', 'ring'], ext_out: ['#5b6b8c', 'ring'] }
+  const roleStyle = { entry: ['#5d6b2f', 'diamond'], exit: ['#d1304b', 'square'], internal: [color, 'circle'], ext_in: ['#a0917c', 'ring'], ext_out: ['#a0917c', 'ring'] }
   const path = (a, b) => {
     const [ax, ay, bx, by] = [px(pos[a][0]), py(pos[a][1]), px(pos[b][0]), py(pos[b][1])]
     if (bx <= ax) {
@@ -73,7 +73,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
             if (!pos[e.src] || !pos[e.dst] || e.src === e.dst) return null
             const fi = firstIdx[`${e.src}|${e.dst}`]
             const live = e.kind === 'external' || e.kind === 'owner' ? true : fi === undefined || fi < step
-            const c = e.kind === 'external' ? '#4a5a7c' : e.kind === 'trade' ? '#a78bfa' : e.kind === 'owner' ? '#8aa0cf' : color
+            const c = e.kind === 'external' ? '#ab9e8b' : e.kind === 'trade' ? '#b5703f' : e.kind === 'owner' ? '#706351' : color
             return (
               <g key={i} onMouseEnter={() => setTip({ x: (px(pos[e.src][0]) + px(pos[e.dst][0])) / 2, y: (py(pos[e.src][1]) + py(pos[e.dst][1])) / 2 - 12, t: `${short(e.src)} → ${short(e.dst)} · ${e.amount ? inr(e.amount) : 'owner link'}${e.n > 1 ? ` · ${e.n}×` : ''}` })}>
                 <path d={path(e.src, e.dst)} fill="none" stroke="transparent" strokeWidth="12" />
@@ -91,18 +91,18 @@ function MiniFlow({ flow, events, color, onTrace }) {
             return (
               <g key={id} style={{ cursor: 'pointer' }} onClick={() => onTrace(id)} onMouseEnter={() => setTip({ x, y: y - 16, t: `${id} · ${r.replace('_', ' ')} · click to trace` })}>
                 {hot && <circle cx={x} cy={y} r="17" fill={hexA(c, 0.22)} className="pulse" />}
-                {shape === 'diamond' && <path d={`M${x},${y - 11} L${x + 11},${y} L${x},${y + 11} L${x - 11},${y} Z`} fill={c} stroke="#101214" strokeWidth="2" />}
-                {shape === 'square' && <rect x={x - 8.5} y={y - 8.5} width="17" height="17" rx="3" fill={c} stroke="#101214" strokeWidth="2" />}
-                {shape === 'circle' && <circle cx={x} cy={y} r="8" fill={c} stroke="#101214" strokeWidth="2" />}
+                {shape === 'diamond' && <path d={`M${x},${y - 11} L${x + 11},${y} L${x},${y + 11} L${x - 11},${y} Z`} fill={c} stroke="#e1ddd6" strokeWidth="2" />}
+                {shape === 'square' && <rect x={x - 8.5} y={y - 8.5} width="17" height="17" rx="3" fill={c} stroke="#e1ddd6" strokeWidth="2" />}
+                {shape === 'circle' && <circle cx={x} cy={y} r="8" fill={c} stroke="#e1ddd6" strokeWidth="2" />}
                 {shape === 'ring' && <circle cx={x} cy={y} r="6" fill="none" stroke={c} strokeWidth="1.6" strokeDasharray="2 2" />}
-                {ids.length <= 12 && <text x={x} y={y + 22} textAnchor="middle" fontSize="9" fill="#8ea2c9" fontFamily="monospace">{short(id)}</text>}
+                {ids.length <= 12 && <text x={x} y={y + 22} textAnchor="middle" fontSize="9" fill="#706351" fontFamily="monospace">{short(id)}</text>}
               </g>
             )
           })}
           {tip && (
             <g pointerEvents="none">
-              <rect x={Math.min(W - 230, Math.max(4, tip.x - 100))} y={Math.max(4, tip.y - 20)} width="226" height="20" rx="6" fill="#050a16" stroke="#243553" />
-              <text x={Math.min(W - 230, Math.max(4, tip.x - 100)) + 8} y={Math.max(4, tip.y - 20) + 14} fontSize="10" fill="#d6e0f5" fontFamily="monospace">{tip.t}</text>
+              <rect x={Math.min(W - 230, Math.max(4, tip.x - 100))} y={Math.max(4, tip.y - 20)} width="226" height="20" rx="6" fill="#e4e0da" stroke="#c5bcb0" />
+              <text x={Math.min(W - 230, Math.max(4, tip.x - 100)) + 8} y={Math.max(4, tip.y - 20) + 14} fontSize="10" fill="#4f6d7a" fontFamily="monospace">{tip.t}</text>
             </g>
           )}
         </svg>
@@ -136,28 +136,28 @@ function TxChart({ events, color }) {
       <svg width="100%" viewBox={`0 0 ${W} ${H}`} onMouseLeave={() => setTip(null)}>
         {ticks.map((v) => (
           <g key={v}>
-            <line x1={L} x2={W - 10} y1={Y(10 ** v)} y2={Y(10 ** v)} stroke="#14223c" />
-            <text x={L - 6} y={Y(10 ** v) + 3} fontSize="9" fill="#6f7f9f" textAnchor="end" fontFamily="monospace">{inr(10 ** v).replace('₹', '')}</text>
+            <line x1={L} x2={W - 10} y1={Y(10 ** v)} y2={Y(10 ** v)} stroke="#d2cbc2" />
+            <text x={L - 6} y={Y(10 ** v) + 3} fontSize="9" fill="#92816a" textAnchor="end" fontFamily="monospace">{inr(10 ** v).replace('₹', '')}</text>
           </g>
         ))}
         {Math.log10(thr) >= a0 && Math.log10(thr) <= a1 && (
           <g>
-            <line x1={L} x2={W - 10} y1={Y(thr)} y2={Y(thr)} stroke="#ffb020" strokeDasharray="4 3" opacity="0.7" />
-            <text x={W - 12} y={Y(thr) - 4} fontSize="9" fill="#ffb020" textAnchor="end">₹50,000 reporting threshold</text>
+            <line x1={L} x2={W - 10} y1={Y(thr)} y2={Y(thr)} stroke="#d1901a" strokeDasharray="4 3" opacity="0.7" />
+            <text x={W - 12} y={Y(thr) - 4} fontSize="9" fill="#d1901a" textAnchor="end">₹50,000 reporting threshold</text>
           </g>
         )}
         <polyline fill="none" stroke={color} strokeOpacity="0.35" points={events.filter((e) => e.kind === 'money').map((e) => `${X(e.t)},${Y(e.amt)}`).join(' ')} />
         {events.map((e, i) => (
-          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#a78bfa' : color} opacity="0.9" stroke="#101214"
+          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#b5703f' : color} opacity="0.9" stroke="#e1ddd6"
             onMouseEnter={() => setTip({ x: X(e.t), y: Y(e.amt), e })} />
         ))}
-        <text x={L} y={H - 6} fontSize="9" fill="#6f7f9f" fontFamily="monospace">{fmtDayTime(t0)}</text>
-        <text x={W - 10} y={H - 6} fontSize="9" fill="#6f7f9f" textAnchor="end" fontFamily="monospace">{fmtDayTime(t1)}</text>
+        <text x={L} y={H - 6} fontSize="9" fill="#92816a" fontFamily="monospace">{fmtDayTime(t0)}</text>
+        <text x={W - 10} y={H - 6} fontSize="9" fill="#92816a" textAnchor="end" fontFamily="monospace">{fmtDayTime(t1)}</text>
         {tip && (
           <g pointerEvents="none">
-            <rect x={Math.min(W - 196, Math.max(4, tip.x - 90))} y={Math.max(4, tip.y - 38)} width="192" height="32" rx="6" fill="#050a16" stroke="#243553" />
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#d6e0f5" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#4fb3a9" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
+            <rect x={Math.min(W - 196, Math.max(4, tip.x - 90))} y={Math.max(4, tip.y - 38)} width="192" height="32" rx="6" fill="#e4e0da" stroke="#c5bcb0" />
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#4f6d7a" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#5d6b2f" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
           </g>
         )}
       </svg>
@@ -199,7 +199,7 @@ export default function CaseFile({ alertId, onTrace, onZoom, onReplay, onLower, 
           <div className="sub">{a.alert_id}{a.secondary_typology ? ` · also: ${a.secondary_typology.replace(/_/g, ' ')}` : ''} · {fmtDay(a.t_start / 86400)}</div>
         </div>
       </div>
-      {below && <div className="truth" style={{ borderColor: '#ffb020', color: '#ffcb6b' }}>Below the current alert threshold. It would not have fired. <button className="btn sm" style={{ marginLeft: 6 }} onClick={() => onLower(a)}>Lower the bar to catch it</button></div>}
+      {below && <div className="truth" style={{ borderColor: '#d1901a', color: '#d1a657' }}>Below the current alert threshold. It would not have fired. <button className="btn sm" style={{ marginLeft: 6 }} onClick={() => onLower(a)}>Lower the bar to catch it</button></div>}
       <div className="summary">{highlightNumbers(a.summary).map((p, i) => (p.num ? <span key={i} className="num">{p.t}</span> : <span key={i}>{p.t}</span>))}</div>
       <div className="pills">
         {a.entry_nodes.slice(0, 4).map((x) => <button key={x} className="pill entry" onClick={() => onTrace(x)}>↘ in · {short(x)}</button>)}
