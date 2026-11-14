@@ -1,6 +1,9 @@
 # Static copy of the TwinTrace front end. The prebuilt app in web/dist is published as is;
 # every /api call is forwarded to the Python backend on Render.
 [build]
+  # Overrides the build command set in the Netlify UI (which pointed at Hugo, which this
+  # project does not use). Nothing needs compiling, so the command is a no-op.
+  command = "echo 'Publishing prebuilt front end from web/dist'"
   publish = "web/dist"
 
 [[redirects]]
