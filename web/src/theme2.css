@@ -5,7 +5,7 @@
   --accent: #7c8cff;
 }
 .app2 { position: fixed; inset: 0; display: grid; grid-template-rows: 52px 1fr 84px; grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: 'top top' 'rail board' 'time time'; background: var(--bg); }
-.app2 .top { grid-area: top; background: var(--bg); border-bottom: 1px solid var(--line); gap: 14px; padding: 0 18px 0 14px; }
+.app2 > .top { grid-area: top; background: var(--bg); border-bottom: 1px solid var(--line); gap: 14px; padding: 0 18px 0 14px; }
 .app2 .kpi { border: 0; background: transparent; padding: 2px 10px; min-width: 0; }
 .app2 .kpi b { font-size: 15px; font-weight: 600; }
 .app2 .kpi span { letter-spacing: 0.04em; text-transform: none; font-size: 11px; }
@@ -76,3 +76,27 @@
   .panel-float { width: calc(100% - 24px); }
   .app2.panel-open .chat-fab { right: 18px; }
 }
+
+/* ---- panel content: What-if lab and Plant a ring ---- */
+.app2 .sect h4, .app2 .grp h4 { font-size: 10.5px; letter-spacing: 0.12em; font-weight: 600; }
+.app2 .grp { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+.app2 .slider-row { margin: 18px 0 8px; padding: 12px 14px 10px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, 0.02); }
+.app2 .slider-row .top { color: var(--ink); font-weight: 500; font-size: 13px; background: none; border: 0; padding: 0; }
+.app2 .slider-row .top b, .app2 .slider-row .top .v { font-family: var(--mono); font-weight: 600; }
+.app2 input[type='range'] { height: 4px; background: var(--line2); margin: 14px 0 8px; }
+.app2 input[type='range']::-webkit-slider-thumb { width: 16px; height: 16px; background: var(--accent); border: 3px solid var(--panel-solid); box-shadow: 0 0 0 1px var(--accent); }
+.app2 .ends { font-size: 11px; opacity: 0.85; }
+.app2 .summary, .app2 .settings-line { background: rgba(124, 140, 255, 0.07); border: 1px solid rgba(124, 140, 255, 0.22); border-radius: 12px; font-size: 12.5px; line-height: 1.55; color: var(--ink); }
+.app2 .presets .btn { border-radius: 999px; padding: 5px 12px; }
+.app2 .metrics { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.app2 .metric { background: transparent; border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.app2 .metric span { letter-spacing: 0.06em; font-size: 10.5px; }
+.app2 .metric b { font-size: 22px; font-weight: 600; margin: 5px 0 3px; }
+.app2 .metric small { font-family: var(--sans); font-size: 11px; line-height: 1.35; }
+.app2 .typ-grid { gap: 10px; }
+.app2 .typ-btn { padding: 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.02); border-color: var(--line); }
+.app2 .typ-btn:hover { background: rgba(255, 255, 255, 0.045); border-color: var(--line2); }
+.app2 .typ-btn.on { background: color-mix(in srgb, var(--c) 10%, transparent); border-color: color-mix(in srgb, var(--c) 70%, transparent); box-shadow: none; }
+.app2 .typ-btn b { font-weight: 600; margin-top: 2px; }
+.app2 .vcard { background: transparent; border-radius: 12px; }
+.app2 .tip { border-color: var(--line2); }
