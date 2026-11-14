@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../api'
 import WhatYouSee from './WhatYouSee.jsx'
-import { COLORS, fmtDay, fmtDayTime, highlightNumbers, hexA, inr, pct, short, typ, DK } from '../util'
+import { COLORS, fmtDay, fmtDayTime, highlightNumbers, hexA, inr, pct, short, typ, DK, ink } from '../util'
 
 function Gauge({ value, color }) {
   const [v, setV] = useState(0)
@@ -142,8 +142,8 @@ function TxChart({ events, color }) {
         ))}
         {Math.log10(thr) >= a0 && Math.log10(thr) <= a1 && (
           <g>
-            <line x1={L} x2={W - 10} y1={Y(thr)} y2={Y(thr)} stroke={(DK() ? '#ffb020' : '#d1901a')} strokeDasharray="4 3" opacity="0.7" />
-            <text x={W - 12} y={Y(thr) - 4} fontSize="9" fill={(DK() ? '#ffb020' : '#d1901a')} textAnchor="end">₹50,000 reporting threshold</text>
+            <line x1={L} x2={W - 10} y1={Y(thr)} y2={Y(thr)} stroke={(DK() ? '#ffb020' : '#9a6a0c')} strokeDasharray="4 3" opacity="0.7" />
+            <text x={W - 12} y={Y(thr) - 4} fontSize="9" fill={(DK() ? '#ffb020' : '#9a6a0c')} textAnchor="end">₹50,000 reporting threshold</text>
           </g>
         )}
         <polyline fill="none" stroke={color} strokeOpacity="0.35" points={events.filter((e) => e.kind === 'money').map((e) => `${X(e.t)},${Y(e.amt)}`).join(' ')} />
@@ -195,11 +195,11 @@ export default function CaseFile({ alertId, onTrace, onZoom, onReplay, onLower, 
       <div className="case-h">
         <Gauge value={a.score} color={c} />
         <div style={{ minWidth: 0 }}>
-          <h2 style={{ color: c }}>{typ(a.typology).glyph} {a.typology_name}</h2>
+          <h2 style={{ color: ink(c) }}>{typ(a.typology).glyph} {a.typology_name}</h2>
           <div className="sub">{a.alert_id}{a.secondary_typology ? ` · also: ${a.secondary_typology.replace(/_/g, ' ')}` : ''} · {fmtDay(a.t_start / 86400)}</div>
         </div>
       </div>
-      {below && <div className="truth" style={{ borderColor: (DK() ? '#ffb020' : '#d1901a'), color: (DK() ? '#ffcb6b' : '#d1a657') }}>Below the current alert threshold. It would not have fired. <button className="btn sm" style={{ marginLeft: 6 }} onClick={() => onLower(a)}>Lower the bar to catch it</button></div>}
+      {below && <div className="truth" style={{ borderColor: (DK() ? '#ffb020' : '#9a6a0c'), color: (DK() ? '#ffcb6b' : '#8a6410') }}>Below the current alert threshold. It would not have fired. <button className="btn sm" style={{ marginLeft: 6 }} onClick={() => onLower(a)}>Lower the bar to catch it</button></div>}
       <div className="summary">{highlightNumbers(a.summary).map((p, i) => (p.num ? <span key={i} className="num">{p.t}</span> : <span key={i}>{p.t}</span>))}</div>
       <div className="pills">
         {a.entry_nodes.slice(0, 4).map((x) => <button key={x} className="pill entry" onClick={() => onTrace(x)}>↘ in · {short(x)}</button>)}

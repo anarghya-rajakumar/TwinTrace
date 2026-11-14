@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { fmtDay, inr, typ } from '../util'
+import { fmtDay, inr, typ, ink } from '../util'
 
 export default function AlertList({ board, thr, t, selectedId, onSelect, typFilter, setTypFilter, playing }) {
   const [sort, setSort] = useState('time')
@@ -45,7 +45,7 @@ export default function AlertList({ board, thr, t, selectedId, onSelect, typFilt
             <button key={a.id} className={'item' + (selectedId === a.id ? ' sel' : '') + (fresh ? ' fresh' : '')} style={{ '--c': c }} onClick={() => onSelect(a)}>
               <div className="row">
                 <span className="t">{typ(a.typ).glyph} {typ(a.typ).label}</span>
-                <span className="score" style={{ color: c }}>{a.score.toFixed(0)}</span>
+                <span className="score" style={{ color: ink(c) }}>{a.score.toFixed(0)}</span>
               </div>
               <div className="row" style={{ marginTop: 3 }}>
                 <span className="id">{a.id} · {fmtDay(a.t1)}</span>

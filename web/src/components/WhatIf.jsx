@@ -70,10 +70,10 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
       {m && (
         <>
           <div className="metrics" style={{ opacity: loading ? 0.6 : 1 }}>
-            <div className="metric"><span>Precision</span><b style={{ color: (DK() ? '#2ee59d' : '#25bb80') }}><AnimNum value={m.precision} fmt={(v) => v.toFixed(2)} /></b><small>alerts that were real</small></div>
+            <div className="metric"><span>Precision</span><b style={{ color: (DK() ? '#2ee59d' : '#1b8a5c') }}><AnimNum value={m.precision} fmt={(v) => v.toFixed(2)} /></b><small>alerts that were real</small></div>
             <div className="metric"><span>Recall</span><b style={{ color: (DK() ? '#22d3ee' : '#2f7a74') }}><AnimNum value={m.recall} fmt={(v) => v.toFixed(2)} /></b><small>{m.found}/{m.rings} rings caught</small></div>
             <div className="metric"><span>F1</span><b><AnimNum value={m.f1} fmt={(v) => v.toFixed(2)} /></b><small>balance of both</small></div>
-            <div className="metric"><span>False alarms</span><b style={{ color: m.fpr > 0.01 ? (DK() ? '#ff3b5c' : '#d1304b') : (DK() ? '#ffb020' : '#d1901a') }}><AnimNum value={m.fpr * 100} fmt={(v) => v.toFixed(2) + '%'} /></b><small>innocent accts flagged</small></div>
+            <div className="metric"><span>False alarms</span><b style={{ color: m.fpr > 0.01 ? (DK() ? '#ff3b5c' : '#b0262f') : (DK() ? '#ffb020' : '#9a6a0c') }}><AnimNum value={m.fpr * 100} fmt={(v) => v.toFixed(2) + '%'} /></b><small>innocent accts flagged</small></div>
             <div className="metric"><span>Alerts</span><b><AnimNum value={m.alerts} fmt={(v) => Math.round(v)} /></b><small>in test period</small></div>
             <div className="metric"><span>Per 1,000</span><b><AnimNum value={m.per1000} fmt={(v) => v.toFixed(1)} /></b><small>rules: {rb ? rb.per1000.toFixed(0) : '–'}</small></div>
           </div>
@@ -85,7 +85,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
                   <div className="sub" style={{ marginBottom: 2 }}>{l}</div>
                   <Bar label="TwinTrace" v={m[k]} color={DK() ? 'linear-gradient(90deg,#22d3ee,#8b6fe0)' : '#2f7a74'} />
                   {sl && <Bar label="Bank only" v={sl[k]} color={(DK() ? '#4f6ba3' : '#9c8c77')} />}
-                  {rb && <Bar label="Rules" v={rb[k]} color={(DK() ? '#ff3b5c' : '#d1304b')} />}
+                  {rb && <Bar label="Rules" v={rb[k]} color={(DK() ? '#ff3b5c' : '#b0262f')} />}
                 </div>
               ))}
             </div>

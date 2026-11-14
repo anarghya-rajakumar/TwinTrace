@@ -1,7 +1,7 @@
 /* Calmer, "clean modern fintech" refresh. Loaded after theme.css; only used by the .app2 shell. */
 :root {
   --bg: #f3eee4; --bg2: #ece6d9; --panel: rgba(251, 248, 241, 0.95); --panel-solid: #fbf8f1;
-  --line: #ddd5c4; --line2: #c9bfaa; --ink: #2b2622; --muted: #7a7066;
+  --line: #ddd5c4; --line2: #c9bfaa; --ink: #2b2622; --muted: #62594f;
   --cyan: #2f7a74; --violet: #b5703f; --accent: #2f7a74; --red: #b3261e; --amber: #b7791f; --green: #3f7d4e;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
@@ -126,3 +126,8 @@ body { background: var(--bg); color: var(--ink); }
 .app2 .hero .btn.ghost { color: #d6e0f5; border-color: rgba(214, 224, 245, 0.35); }
 .app2 .cta .btn.ghost { background: rgba(5, 9, 18, 0.7); color: #d6e0f5; border-color: rgba(214, 224, 245, 0.35); }
 .app2 .globe-note, .app2 .loader { color: #9fb0d6; }
+
+/* light mode: slightly deeper text colours for everything that is not the (dark) graph area */
+:root:not([data-theme='dark']) .chip, :root:not([data-theme='dark']) .pill { color: var(--ink); }
+:root:not([data-theme='dark']) .app2 .kpi span, :root:not([data-theme='dark']) .app2 .sub, :root:not([data-theme='dark']) .app2 .ends { color: #5f564c; }
+:root:not([data-theme='dark']) .app2 .wys li b:first-child { color: #3f5f5b; }

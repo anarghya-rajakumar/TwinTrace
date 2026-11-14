@@ -43,3 +43,11 @@ export const highlightNumbers = (s) =>
 export const clamp = (x, a, b) => Math.max(a, Math.min(b, x))
 
 export const DK = () => document.documentElement.dataset.theme === 'dark'
+
+/** Text version of a typology colour: darkened on the light theme so it stays readable on cream. */
+export const ink = (hex) => {
+  if (DK()) return hex
+  const n = parseInt(hex.slice(1), 16), k = 0.45, t = [0x2b, 0x26, 0x22]
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v, i) => Math.round(v * (1 - k) + t[i] * k))
+  return '#' + ch.map((v) => v.toString(16).padStart(2, '0')).join('')
+}
