@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { api } from '../api'
 import { pct } from '../util'
 
-export default function TopBar({ metrics, base, alertsFired, filters, setFilters, showTruth, setShowTruth, onPick, onTour, tab, setTab, injected, onLogo }) {
+export default function TopBar({ metrics, base, alertsFired, filters, setFilters, showTruth, setShowTruth, onPick, onTour, tab, setTab, injected, onLogo, onPresent }) {
   const [q, setQ] = useState('')
   const [res, setRes] = useState([])
   const tm = useRef(null)
@@ -40,6 +40,7 @@ export default function TopBar({ metrics, base, alertsFired, filters, setFilters
       <button className={'btn' + (showTruth ? ' on' : '')} onClick={() => setShowTruth(!showTruth)} title="Overlay the synthetic ground truth: real rings, false alarms, misses">◎ Reveal truth</button>
       <button className={'btn' + (tab === 'plant' ? ' on' : '')} onClick={() => setTab('plant')}>＋ Plant a ring{injected ? ` (${injected})` : ''}</button>
       <button className={'btn' + (tab === 'lab' ? ' on' : '')} onClick={() => setTab('lab')}>⚙ What-if lab</button>
+      <button className="btn" onClick={onPresent} title="Hide panels for a projector (P)">⛶ Present</button>
       <button className="btn primary" onClick={onTour}>▶ Guided demo</button>
     </div>
   )

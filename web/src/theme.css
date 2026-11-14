@@ -23,7 +23,7 @@ input { font-family: inherit; }
 ::-webkit-scrollbar-thumb { background: #1d2c49; border-radius: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 
-.app { --inbox-w: 320px; --drawer-w: 420px; position: fixed; inset: 0; display: grid; grid-template-rows: 56px 1fr 92px; grid-template-columns: var(--inbox-w) var(--drawer-w) minmax(0, 1fr); grid-template-areas: 'top top top' 'left right board' 'time time time'; transition: grid-template-columns 0.32s cubic-bezier(.2, .8, .2, 1); }
+.app { --inbox-w: 320px; --drawer-w: 420px; position: fixed; inset: 0; display: grid; grid-template-rows: 56px 1fr 92px; grid-template-columns: var(--inbox-w) var(--drawer-w) minmax(0, 1fr); grid-template-areas: 'top top top' 'left right board' 'time time time'; transition: grid-template-columns 0.32s cubic-bezier(.2, .8, .2, 1), grid-template-rows 0.32s cubic-bezier(.2, .8, .2, 1); }
 .app.no-left { --inbox-w: 0px; }
 .top { grid-area: top; display: flex; align-items: center; gap: 10px; padding: 0 14px; overflow: hidden; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #0a1224, #070d1a); z-index: 5; }
 .left { grid-area: left; border-right: 1px solid var(--line); background: var(--bg2); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
@@ -255,3 +255,11 @@ input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 18p
 .reboot .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #22d3ee, #8b6fe0, #ff3b5c); animation: fill 1s ease-out forwards; box-shadow: 0 0 12px #22d3ee; }
 @keyframes boot { 0% { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.12); } 100% { transform: rotate(360deg) scale(1); } }
 @keyframes fill { to { width: 100%; } }
+
+/* present mode: just the board, the timeline and the guided captions */
+.app.present { grid-template-rows: 0 1fr 92px; --inbox-w: 0px; --drawer-w: 0px; }
+.app.present .top { opacity: 0; pointer-events: none; overflow: hidden; border-bottom-width: 0; }
+.app.present .left, .app.present .right { opacity: 0; pointer-events: none; border-width: 0; }
+.app.present .inbox-toggle, .app.present .board-wrap .wys { display: none; }
+.present-exit { position: absolute; top: 12px; left: 12px; z-index: 40; opacity: 0.55; transition: opacity 0.2s; }
+.present-exit:hover { opacity: 1; }

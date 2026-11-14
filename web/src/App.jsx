@@ -41,7 +41,9 @@ export default function App() {
   const [showTruth, setShowTruth] = useState(false)
   const [selectedId, setSelectedId] = useState(null)
   const [focusSet, setFocusSet] = useState(null)
-  const [tab, setTab] = useState('case')
+  const [tab, setTab] = useState(() => { try { const t = localStorage.getItem('tt-tab'); return ['case', 'lab', 'plant'].includes(t) ? t : 'case' } catch (e) { return 'case' } })
+  const [present, setPresent] = useState(false)
+  useEffect(() => { try { localStorage.setItem('tt-tab', tab) } catch (e) { /* ignore */ } }, [tab])
   const [leftOpen, setLeftOpen] = useState(false)   // the inbox starts collapsed and is never auto-opened
   const [rebooting, setRebooting] = useState(false)
   const [trace, setTrace] = useState(null)
@@ -109,14 +111,32 @@ export default function App() {
   }
   const changeSpeed = (v) => { speedRef.current = v; setSpeed(v) }
 
-  useEffect(() => {
-    const k = (e) => {
-      if (e.target.tagName === 'INPUT') return
-      if (e.code === 'Space' && board) { e.preventDefault(); togglePlay() }
+  const keyAct = useRef(null)
+  keyAct.current = (e) => {
+    if (!board || e.ctrlKey || e.metaKey || e.altKey) return
+    const tag = e.target.tagName
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); return }
+    const k = e.key.toLowerCase()
+    if (k === 'escape') {
+      if (trace) setTrace(null)
+      else if (tour >= 0) setTour(-1)
+      else if (present) setPresent(false)
+      else if (selectedId) clearSel()
+    } else if (k === 'i') setLeftOpen((v) => !v)
+    else if (k === '1') setTab('case')
+    else if (k === '2') setTab('lab')
+    else if (k === '3') setTab('plant')
+    else if (k === 'p') setPresent((v) => !v)
+    else if (k === '?' || (k === '/' && e.shiftKey)) {
+      pushToast('<b>Shortcuts</b> · Space play · I inbox · 1 case file · 2 what-if · 3 plant · P present mode · Esc close', COLORS.cyan, '⌨', 7000)
     }
+  }
+  useEffect(() => {
+    const k = (e) => keyAct.current && keyAct.current(e)
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
-  }, [board])
+  }, [])
 
   // ------------------------------------------------------------------ live benchmark for the current thresholds
   useEffect(() => {
@@ -245,11 +265,11 @@ export default function App() {
 
   const sel = selectedId && board.alerts.find((a) => a.id === selectedId)
   return (
-    <div className={'app' + (leftOpen ? '' : ' no-left')}>
+    <div className={'app' + (leftOpen ? '' : ' no-left') + (present ? ' present' : '')}>
       <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} filters={filters} setFilters={setFilters}
-        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => setTour(0)} tab={tab} setTab={setTab} injected={injected}
+        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => { setPresent(false); setTour(0) }} onPresent={() => setPresent(true)} tab={tab} setTab={setTab} injected={injected}
         onLogo={() => { setRebooting(true); setTimeout(() => window.location.reload(), 1050) }} />
-      <button className="inbox-toggle" onClick={() => setLeftOpen(!leftOpen)} aria-expanded={leftOpen} title={leftOpen ? 'Collapse the alert inbox' : 'Open the alert inbox'}>
+      <button className="inbox-toggle" onClick={() => setLeftOpen(!leftOpen)} aria-expanded={leftOpen} title={(leftOpen ? 'Collapse' : 'Open') + ' the alert inbox (I)'}>
         <span className="chev">{leftOpen ? '◀' : '▶'}</span><span className="vt">Alert inbox</span><span className="badge">{firedCount}</span>
       </button>
       <div className="left">
@@ -261,6 +281,7 @@ export default function App() {
         {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
         {React.createElement(view3d ? BoardGlobe : Board, { key: boardKey + (view3d ? 'g' : 'd2'), ref: boardRef, orbit, onAlertClick: (ai) => selectAlert(board.alerts[ai]), board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
         <Toasts items={toasts} />
+        {present && <button className="btn sm present-exit" onClick={() => setPresent(false)}>✕ Exit present mode (Esc)</button>}
         <div className="hud-tr">
           <div className="seg" title="Flat network of accounts, or a globe with one point per flagged ring">
             <button className={!view3d ? 'on' : ''} onClick={() => view3d && switchView(false)}>2D</button>
@@ -308,11 +329,11 @@ export default function App() {
       </div>
       <div className="right">
         <div className="tabs">
-          <button className={tab === 'case' ? 'on' : ''} onClick={() => setTab('case')}>⚑ Case file</button>
-          <button className={tab === 'lab' ? 'on' : ''} onClick={() => setTab('lab')}>⚙ What-if lab</button>
-          <button className={tab === 'plant' ? 'on' : ''} onClick={() => setTab('plant')}>＋ Plant ring</button>
+          <button className={tab === 'case' ? 'on' : ''} onClick={() => setTab('case')} title="Case file (1)">⚑ Case file</button>
+          <button className={tab === 'lab' ? 'on' : ''} onClick={() => setTab('lab')} title="What-if lab (2)">⚙ What-if lab</button>
+          <button className={tab === 'plant' ? 'on' : ''} onClick={() => setTab('plant')} title="Plant a ring (3)">＋ Plant ring</button>
         </div>
-        <div className="drawer-body" key={tab}>
+        <div className="drawer-body" key={tab + (tab === 'case' ? selectedId : '')}>
           {tab === 'case' && (
             <CaseFile alertId={selectedId} thr={thr} onTrace={(a) => setTrace(a)} onZoom={() => sel && boardRef.current.zoomToAlert(sel.i)}
               onReplay={(a) => { seek(Math.max(0, a.t_start / 86400 - 1)); changeSpeed(4); stopAt.current = Math.min(board.days, a.t_end / 86400 + 1.5); setPlay(true); sel && boardRef.current.zoomToAlert(sel.i) }}
