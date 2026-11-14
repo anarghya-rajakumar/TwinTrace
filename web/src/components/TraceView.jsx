@@ -42,7 +42,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
       .nodeLabel((n) => `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${n.alerts.length ? '<br/><span style="color:#ff8aa0">⚑ ' + n.alerts.join(', ') + '</span>' : ''}<br/><span style="color:#6f7f9f">click to follow from here</span>`)
       .nodeCanvasObject((n, ctx, gs) => draw(n, ctx, gs, dataRef.current && dataRef.current.origin))
       .nodePointerAreaPaint((n, color, ctx) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(n.x, n.y, 11, 0, 6.2832); ctx.fill() })
-      .linkColor((l) => (l.kind === 'trade' ? hexA('#a78bfa', 0.55) : l.kind === 'owner' ? hexA('#9fb0d6', 0.5) : hexA('#22d3ee', 0.55)))
+      .linkColor((l) => (l.kind === 'trade' ? hexA('#a78bfa', 0.55) : l.kind === 'owner' ? hexA('#9fb0d6', 0.5) : hexA('#4fb3a9', 0.55)))
       .linkWidth((l) => (l.kind === 'owner' ? 1 : 1 + Math.log10(l.amount + 10) / 2.6))
       .linkLineDash((l) => (l.kind === 'trade' ? [4, 3] : l.kind === 'owner' ? [1, 3] : null))
       .linkDirectionalArrowLength(6)
@@ -130,7 +130,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
             {stack.map((s, i) => (
               <React.Fragment key={i}>
                 {i > 0 && <span>›</span>}
-                <button style={{ color: i === stack.length - 1 ? '#22d3ee' : undefined }} onClick={() => setStack(stack.slice(0, i + 1))}>{short(s)}</button>
+                <button style={{ color: i === stack.length - 1 ? '#4fb3a9' : undefined }} onClick={() => setStack(stack.slice(0, i + 1))}>{short(s)}</button>
               </React.Fragment>
             ))}
           </div>
@@ -154,7 +154,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
       </div>
       <div className="trace-side">
         <h4 style={{ margin: '0 0 6px', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)' }}>Tracing</h4>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 15, color: '#22d3ee', wordBreak: 'break-all' }}>{cur}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 15, color: '#4fb3a9', wordBreak: 'break-all' }}>{cur}</div>
         {data && (
           <div className="kv" style={{ margin: '12px 0' }}>
             <div><span>upstream</span><b>{data.reach.up}</b></div>
@@ -177,7 +177,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
 function draw(n, ctx, gs, origin) {
   const flagged = n.alerts.length > 0
   const isO = n.id === origin
-  const col = isO ? '#22d3ee' : flagged ? '#ff3b5c' : n.k === 'b' ? '#5b8bea' : '#a58cf0'
+  const col = isO ? '#4fb3a9' : flagged ? '#ff3b5c' : n.k === 'b' ? '#5b8bea' : '#a58cf0'
   const r = isO ? 8.5 : flagged ? 6.5 : 5
   ctx.save()
   if (isO || flagged) {
@@ -196,12 +196,12 @@ function draw(n, ctx, gs, origin) {
   ctx.fill()
   ctx.shadowBlur = 0
   ctx.lineWidth = 1.5
-  ctx.strokeStyle = '#050912'
+  ctx.strokeStyle = '#101214'
   ctx.stroke()
   if (isO || flagged || n.dist <= 1 || gs > 1.6) {
     ctx.font = `${isO ? 5.2 : 4.2}px JetBrains Mono, monospace`
     ctx.textAlign = 'center'
-    ctx.fillStyle = isO ? '#22d3ee' : 'rgba(214,224,245,0.85)'
+    ctx.fillStyle = isO ? '#4fb3a9' : 'rgba(214,224,245,0.85)'
     ctx.fillText(short(n.id), n.x, n.y + r + 8)
   }
   ctx.restore()

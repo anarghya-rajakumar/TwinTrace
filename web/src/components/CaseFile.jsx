@@ -50,7 +50,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
     return m
   }, [events])
   const cur = events[Math.min(step, events.length) - 1]
-  const roleStyle = { entry: ['#22d3ee', 'diamond'], exit: ['#ff3b5c', 'square'], internal: [color, 'circle'], ext_in: ['#5b6b8c', 'ring'], ext_out: ['#5b6b8c', 'ring'] }
+  const roleStyle = { entry: ['#4fb3a9', 'diamond'], exit: ['#ff3b5c', 'square'], internal: [color, 'circle'], ext_in: ['#5b6b8c', 'ring'], ext_out: ['#5b6b8c', 'ring'] }
   const path = (a, b) => {
     const [ax, ay, bx, by] = [px(pos[a][0]), py(pos[a][1]), px(pos[b][0]), py(pos[b][1])]
     if (bx <= ax) {
@@ -91,9 +91,9 @@ function MiniFlow({ flow, events, color, onTrace }) {
             return (
               <g key={id} style={{ cursor: 'pointer' }} onClick={() => onTrace(id)} onMouseEnter={() => setTip({ x, y: y - 16, t: `${id} · ${r.replace('_', ' ')} · click to trace` })}>
                 {hot && <circle cx={x} cy={y} r="17" fill={hexA(c, 0.22)} className="pulse" />}
-                {shape === 'diamond' && <path d={`M${x},${y - 11} L${x + 11},${y} L${x},${y + 11} L${x - 11},${y} Z`} fill={c} stroke="#06101f" strokeWidth="2" />}
-                {shape === 'square' && <rect x={x - 8.5} y={y - 8.5} width="17" height="17" rx="3" fill={c} stroke="#06101f" strokeWidth="2" />}
-                {shape === 'circle' && <circle cx={x} cy={y} r="8" fill={c} stroke="#06101f" strokeWidth="2" />}
+                {shape === 'diamond' && <path d={`M${x},${y - 11} L${x + 11},${y} L${x},${y + 11} L${x - 11},${y} Z`} fill={c} stroke="#101214" strokeWidth="2" />}
+                {shape === 'square' && <rect x={x - 8.5} y={y - 8.5} width="17" height="17" rx="3" fill={c} stroke="#101214" strokeWidth="2" />}
+                {shape === 'circle' && <circle cx={x} cy={y} r="8" fill={c} stroke="#101214" strokeWidth="2" />}
                 {shape === 'ring' && <circle cx={x} cy={y} r="6" fill="none" stroke={c} strokeWidth="1.6" strokeDasharray="2 2" />}
                 {ids.length <= 12 && <text x={x} y={y + 22} textAnchor="middle" fontSize="9" fill="#8ea2c9" fontFamily="monospace">{short(id)}</text>}
               </g>
@@ -148,7 +148,7 @@ function TxChart({ events, color }) {
         )}
         <polyline fill="none" stroke={color} strokeOpacity="0.35" points={events.filter((e) => e.kind === 'money').map((e) => `${X(e.t)},${Y(e.amt)}`).join(' ')} />
         {events.map((e, i) => (
-          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#a78bfa' : color} opacity="0.9" stroke="#06101f"
+          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#a78bfa' : color} opacity="0.9" stroke="#101214"
             onMouseEnter={() => setTip({ x: X(e.t), y: Y(e.amt), e })} />
         ))}
         <text x={L} y={H - 6} fontSize="9" fill="#6f7f9f" fontFamily="monospace">{fmtDayTime(t0)}</text>
@@ -157,7 +157,7 @@ function TxChart({ events, color }) {
           <g pointerEvents="none">
             <rect x={Math.min(W - 196, Math.max(4, tip.x - 90))} y={Math.max(4, tip.y - 38)} width="192" height="32" rx="6" fill="#050a16" stroke="#243553" />
             <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#d6e0f5" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#22d3ee" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#4fb3a9" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
           </g>
         )}
       </svg>

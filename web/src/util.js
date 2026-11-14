@@ -6,14 +6,14 @@ export const TYP = {
   mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#ff3b5c', glyph: '⛓' },
   wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#a78bfa', glyph: '⟳' },
   loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#d28bff', glyph: '⇅' },
-  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#22d3ee', glyph: '⛛' },
+  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#5fa8d3', glyph: '⛛' },
   unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#94a3b8', glyph: '◇' },
 }
 export const typ = (k) => TYP[k] || TYP.unclassified_anomaly
 
 export const COLORS = {
-  bank: '#4c78c9', demat: '#8b6fe0', bankDim: '#2c3f66', crematDim: '#40336b', amber: '#ffb020', green: '#2ee59d',
-  red: '#ff3b5c', cyan: '#22d3ee', ink: '#d6e0f5', muted: '#6f7f9f',
+  bank: '#6f93a8', demat: '#c08a6a', bankDim: '#34454f', crematDim: '#55402f', amber: '#ffb020', green: '#2ee59d',
+  red: '#ff3b5c', cyan: '#4fb3a9', ink: '#ece9e2', muted: '#8b9196',
 }
 
 export const inr = (x) => {

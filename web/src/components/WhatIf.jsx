@@ -46,7 +46,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
       <div className="sect" style={{ marginTop: 0 }}>
         <h4>How strict should alerts be?</h4>
         <div className="slider-row">
-          <div className="top"><span title="How strict alerts are for bank transfers">● Bank transfers: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#22d3ee' }}>{off(thr.money)}</b></div>
+          <div className="top"><span title="How strict alerts are for bank transfers">● Bank transfers: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#4fb3a9' }}>{off(thr.money)}</b></div>
           <input type="range" min={floor} max="101" step="0.5" value={thr.money} onChange={(e) => setThr({ ...thr, money: +e.target.value })} />
           <div className="ends"><span>◀ More alerts: catches more, but more false alarms</span><span>Fewer alerts: fewer false alarms, but may miss some ▶</span></div>
           <div className="sub">trained default {defaults.money.toFixed(1)}</div>
@@ -71,7 +71,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
         <>
           <div className="metrics" style={{ opacity: loading ? 0.6 : 1 }}>
             <div className="metric"><span>Precision</span><b style={{ color: '#2ee59d' }}><AnimNum value={m.precision} fmt={(v) => v.toFixed(2)} /></b><small>alerts that were real</small></div>
-            <div className="metric"><span>Recall</span><b style={{ color: '#22d3ee' }}><AnimNum value={m.recall} fmt={(v) => v.toFixed(2)} /></b><small>{m.found}/{m.rings} rings caught</small></div>
+            <div className="metric"><span>Recall</span><b style={{ color: '#4fb3a9' }}><AnimNum value={m.recall} fmt={(v) => v.toFixed(2)} /></b><small>{m.found}/{m.rings} rings caught</small></div>
             <div className="metric"><span>F1</span><b><AnimNum value={m.f1} fmt={(v) => v.toFixed(2)} /></b><small>balance of both</small></div>
             <div className="metric"><span>False alarms</span><b style={{ color: m.fpr > 0.01 ? '#ff3b5c' : '#ffb020' }}><AnimNum value={m.fpr * 100} fmt={(v) => v.toFixed(2) + '%'} /></b><small>innocent accts flagged</small></div>
             <div className="metric"><span>Alerts</span><b><AnimNum value={m.alerts} fmt={(v) => Math.round(v)} /></b><small>in test period</small></div>
@@ -83,7 +83,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
               {[['Precision', 'precision'], ['Recall', 'recall'], ['F1', 'f1']].map(([l, k]) => (
                 <div key={k} style={{ marginBottom: 10 }}>
                   <div className="sub" style={{ marginBottom: 2 }}>{l}</div>
-                  <Bar label="TwinTrace" v={m[k]} color="linear-gradient(90deg,#22d3ee,#8b6fe0)" />
+                  <Bar label="TwinTrace" v={m[k]} color="#4fb3a9" />
                   {sl && <Bar label="Bank only" v={sl[k]} color="#4f6ba3" />}
                   {rb && <Bar label="Rules" v={rb[k]} color="#ff3b5c" />}
                 </div>
