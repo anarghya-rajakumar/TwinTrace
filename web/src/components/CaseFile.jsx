@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../api'
+import WhatYouSee from './WhatYouSee.jsx'
 import { COLORS, fmtDay, fmtDayTime, highlightNumbers, hexA, inr, pct, short, typ } from '../util'
 
 function Gauge({ value, color }) {
@@ -214,7 +215,12 @@ export default function CaseFile({ alertId, onTrace, onZoom, onReplay, onLower, 
           <button key={k} className={view === k ? 'on' : ''} style={{ flex: 1 }} onClick={() => setView(k)}>{l}</button>
         ))}
       </div>
-      {view === 'flow' && <MiniFlow flow={d.flow} events={d.events} color={c} onTrace={onTrace} />}
+      {view === 'flow' && (
+        <>
+          <WhatYouSee kind="alert" alert={a} />
+          <MiniFlow flow={d.flow} events={d.events} color={c} onTrace={onTrace} />
+        </>
+      )}
       {view === 'time' && <TxChart events={d.events} color={c} />}
       {view === 'why' && (
         <div className="sect" style={{ marginTop: 4 }}>

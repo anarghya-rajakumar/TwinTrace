@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ForceGraph from 'force-graph'
 import { forceY } from 'd3-force'
+import WhatYouSee from './WhatYouSee.jsx'
 import { api } from '../api'
 import { COLORS, fmtDay, hexA, inr, short } from '../util'
 
@@ -128,6 +129,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
           <div className="seg">{[1, 2, 3, 4].map((d) => <button key={d} className={depth === d ? 'on' : ''} onClick={() => setDepth(d)}>{d} hop{d > 1 ? 's' : ''}</button>)}</div>
           <div className="seg">{[3, 5, 8].map((d) => <button key={d} className={per === d ? 'on' : ''} onClick={() => setPer(d)}>top {d}</button>)}</div>
         </div>
+        <div className="trace-wys"><WhatYouSee kind="trace" trace={data ? { flagged: data.reach.flagged, originAlerts: (data.nodes.find((n) => n.id === cur) || { alerts: [] }).alerts.length > 0 } : null} /></div>
         <div className="side-label" style={{ left: 22 }}>◀ where the money came from</div>
         <div className="side-label" style={{ right: 22 }}>where it went ▶</div>
         <div ref={el} style={{ position: 'absolute', inset: 0 }} />

@@ -29,23 +29,36 @@ const Bar = ({ label, v, color }) => (
 )
 
 /** Move the alert bar and watch precision, recall and false alarms respond. The board re-filters at the same time. */
-export default function WhatIf({ thr, setThr, defaults, m, methods, loading, floor = 50 }) {
+export default function WhatIf({ thr, setThr, defaults, m, methods, loading, floor = 50, shown = 0, total = 0, accounts = 1 }) {
   const off = (v) => (v > 100 ? 'off' : v.toFixed(1))
   const preset = (money, trade) => setThr({ money, trade })
   const rb = methods.rule_baseline, sl = methods.single_layer
+  // plain-language reading of the current setting vs the tested default (display only; thresholds are untouched)
+  const diff = ((thr.money - defaults.money) + (thr.trade - defaults.trade)) / 2
+  const explain = Math.abs(diff) < 0.6
+    ? 'This is the strictness we tested: a balance between catching rings and avoiding false alarms.'
+    : diff < 0
+      ? 'Looser than we tested: more rings get caught, but more normal accounts get flagged by mistake.'
+      : 'Stricter than we tested: very few false alarms, but some rings may slip through.'
+  const per1000 = accounts ? (shown / accounts) * 1000 : 0
   return (
     <div>
       <div className="sect" style={{ marginTop: 0 }}>
-        <h4>Alert thresholds (risk score needed to raise an alert)</h4>
+        <h4>How strict should alerts be?</h4>
         <div className="slider-row">
-          <div className="top"><span>● Bank-layer bar</span><b style={{ fontFamily: 'var(--mono)', color: '#22d3ee' }}>{off(thr.money)}</b></div>
+          <div className="top"><span title="How strict alerts are for bank transfers">● Bank transfers: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#22d3ee' }}>{off(thr.money)}</b></div>
           <input type="range" min={floor} max="101" step="0.5" value={thr.money} onChange={(e) => setThr({ ...thr, money: +e.target.value })} />
+          <div className="ends"><span>◀ More alerts: catches more, but more false alarms</span><span>Fewer alerts: fewer false alarms, but may miss some ▶</span></div>
           <div className="sub">trained default {defaults.money.toFixed(1)}</div>
         </div>
         <div className="slider-row">
-          <div className="top"><span>◆ Trade-layer bar</span><b style={{ fontFamily: 'var(--mono)', color: '#a78bfa' }}>{off(thr.trade)}</b></div>
+          <div className="top"><span title="How strict alerts are for stock trades">◆ Stock trades: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#a78bfa' }}>{off(thr.trade)}</b></div>
           <input type="range" min={floor} max="101" step="0.1" value={thr.trade} onChange={(e) => setThr({ ...thr, trade: +e.target.value })} />
+          <div className="ends"><span>◀ More alerts: catches more, but more false alarms</span><span>Fewer alerts: fewer false alarms, but may miss some ▶</span></div>
           <div className="sub">trained default {defaults.trade.toFixed(1)} · 101 turns the layer off</div>
+        </div>
+        <div className="settings-line">
+          <b>Currently showing {shown} alerts out of {total}</b> (about {per1000.toFixed(1)} per 1,000 accounts). {explain}
         </div>
         <div className="presets">
           <button className="btn sm" onClick={() => preset(defaults.money, defaults.trade)}>⟲ Trained default</button>

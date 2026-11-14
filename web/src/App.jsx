@@ -10,6 +10,7 @@ import TraceView from './components/TraceView.jsx'
 import WhatIf from './components/WhatIf.jsx'
 import PlantPanel from './components/PlantPanel.jsx'
 import Toasts from './components/Toasts.jsx'
+import WhatYouSee from './components/WhatYouSee.jsx'
 
 const TOUR = [
   ['Welcome to the board', 'Every dot is an account. Circles are bank accounts, diamonds are trading accounts. The glowing coloured clusters are laundering rings TwinTrace has flagged, hiding among thousands of normal accounts.'],
@@ -241,6 +242,8 @@ export default function App() {
         <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
       </div>
       <div className="board-wrap">
+        <WhatYouSee kind="board" />
+        <div className="board-stage">
         {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
         <Board key={boardKey} ref={boardRef} board={board} version={version} tRef={tRef} t={t} thr={thr} filters={filters} showTruth={showTruth} focusSet={focusSet}
           playing={playing} onNodeClick={onNodeClick} onBackground={clearSel} onFire={onFire} onReady={() => setReady(true)} />
@@ -274,6 +277,7 @@ export default function App() {
             </div>
           </div>
         )}
+        </div>
       </div>
       <div className="right">
         <div className="tabs">
@@ -287,7 +291,8 @@ export default function App() {
               onReplay={(a) => { seek(Math.max(0, a.t_start / 86400 - 1)); changeSpeed(4); stopAt.current = Math.min(board.days, a.t_end / 86400 + 1.5); setPlay(true); sel && boardRef.current.zoomToAlert(sel.i) }}
               onLower={(a) => lowerFor(grpOf(a.layer), a.score)} />
           )}
-          {tab === 'lab' && <WhatIf thr={thr} setThr={setThr} defaults={defaults} m={metrics} methods={board.methods} loading={mLoading} floor={board.min_score} />}
+          {tab === 'lab' && <WhatIf thr={thr} setThr={setThr} defaults={defaults} m={metrics} methods={board.methods} loading={mLoading} floor={board.min_score}
+            shown={board.alerts.filter((a) => a.score >= thr[a.grp]).length} total={board.alerts.length} accounts={board.n_accounts} />}
           {tab === 'plant' && (
             <PlantPanel day={t} onPlant={onPlant} onWatch={watch} onOpenAlert={openAlertById} injected={injected} onClear={clearPlanted}
               onLower={(res) => { lowerFor(res.closest.layer === 'money' ? 'money' : 'trade', res.closest.score); setTab('lab') }} />
