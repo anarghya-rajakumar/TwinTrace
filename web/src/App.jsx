@@ -42,7 +42,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null)
   const [focusSet, setFocusSet] = useState(null)
   const [tab, setTab] = useState('case')
-  const [leftOpen, setLeftOpen] = useState(true)
+  const [leftOpen, setLeftOpen] = useState(false)   // the inbox starts collapsed and is never auto-opened
+  const [rebooting, setRebooting] = useState(false)
   const [trace, setTrace] = useState(null)
   const [toasts, setToasts] = useState([])
   const [metrics, setMetrics] = useState(null)
@@ -246,7 +247,11 @@ export default function App() {
   return (
     <div className={'app' + (leftOpen ? '' : ' no-left')}>
       <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} filters={filters} setFilters={setFilters}
-        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => setTour(0)} tab={tab} setTab={setTab} injected={injected} />
+        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => setTour(0)} tab={tab} setTab={setTab} injected={injected}
+        onLogo={() => { setRebooting(true); setTimeout(() => window.location.reload(), 1050) }} />
+      <button className="inbox-toggle" onClick={() => setLeftOpen(!leftOpen)} aria-expanded={leftOpen} title={leftOpen ? 'Collapse the alert inbox' : 'Open the alert inbox'}>
+        <span className="chev">{leftOpen ? '◀' : '▶'}</span><span className="vt">Alert inbox</span><span className="badge">{firedCount}</span>
+      </button>
       <div className="left">
         <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
       </div>
@@ -324,6 +329,16 @@ export default function App() {
       <div className="timebar">
         <Timeline board={board} t={t} playing={playing} speed={speed} onToggle={togglePlay} onSpeed={changeSpeed} onSeek={seek} thr={thr} firedCount={firedCount} />
       </div>
+      {rebooting && (
+        <div className="reboot">
+          <div>
+            <div className="logo-mark"><span>TT</span></div>
+            <h2>TWINTRACE</h2>
+            <p>re-scanning the network…</p>
+            <div className="bar"><i /></div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

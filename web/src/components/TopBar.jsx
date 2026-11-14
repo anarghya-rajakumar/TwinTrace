@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { api } from '../api'
 import { pct } from '../util'
 
-export default function TopBar({ metrics, base, alertsFired, filters, setFilters, showTruth, setShowTruth, onPick, onTour, tab, setTab, injected }) {
+export default function TopBar({ metrics, base, alertsFired, filters, setFilters, showTruth, setShowTruth, onPick, onTour, tab, setTab, injected, onLogo }) {
   const [q, setQ] = useState('')
   const [res, setRes] = useState([])
   const tm = useRef(null)
@@ -16,7 +16,7 @@ export default function TopBar({ metrics, base, alertsFired, filters, setFilters
   }, [q])
   return (
     <div className="top">
-      <div className="logo">
+      <div className="logo" onClick={onLogo} role="button" tabIndex={0} title="Click to re-scan the network" onKeyDown={(e) => e.key === 'Enter' && onLogo && onLogo()}>
         <div className="logo-mark"><span>TT</span></div>
         <div>TwinTrace<small>cross-layer crime radar</small></div>
       </div>
