@@ -54,8 +54,8 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
           {ticks.map((a) => (
             <rect key={a.id} x={x(a.t1) - 0.8} y={16} width={1.6} height={8 + (a.score / 100) * 10} fill={typ(a.typ).color} opacity={a.t1 <= t ? 1 : 0.35} />
           ))}
-          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#5d6b2f" strokeWidth="2" />
-          <circle cx={x(t)} cy={H - 6} r="6" fill="#5d6b2f" stroke="#e1ddd6" strokeWidth="2" />
+          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#7a1f33" strokeWidth="2" />
+          <circle cx={x(t)} cy={H - 6} r="6" fill="#7a1f33" stroke="#e1ddd6" strokeWidth="2" />
         </svg>
       </div>
       <div className="speed">

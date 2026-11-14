@@ -71,7 +71,7 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
     legend = (
       <>
         <Sw c={c} /> Circles are accounts. Lines with moving dashes are money moving, and <b>thicker lines mean more money</b>.{' '}
-        <Sw c="#5d6b2f" shape="diamond" /> A <b style={{ color: '#5d6b2f' }}>teal diamond</b> is an entry point (money coming in from outside this group).{' '}
+        <Sw c="#7a1f33" shape="diamond" /> A <b style={{ color: '#7a1f33' }}>burgundy diamond</b> is an entry point (money coming in from outside this group).{' '}
         <Sw c="#d1304b" shape="square" /> A <b style={{ color: '#d17183' }}>red square</b> is an exit point (money leaving this group).{' '}
         <Sw c="#a0917c" dashed /> Grey dashed circles are outside accounts.
         {tradey && <> <Sw c="#b5703f" /> Clay dashed lines are share trades; dotted lines link a bank account to its owner’s trading account.</>}
@@ -86,7 +86,7 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
   } else if (kind === 'trace') {
     legend = (
       <>
-        <Sw c={COLORS.cyan} /> The big <b style={{ color: '#5d6b2f' }}>teal</b> circle is the account you clicked. <Sw c="#4f6d7a" /> Slate circles are bank accounts and <Sw c="#b5703f" shape="diamond" /> clay diamonds are trading accounts. <Sw c="#d1304b" /> <b style={{ color: '#d17183' }}>Red</b> accounts were flagged by TwinTrace.
+        <Sw c={COLORS.cyan} /> The big <b style={{ color: '#7a1f33' }}>burgundy</b> circle is the account you clicked. <Sw c="#4f6d7a" /> Slate circles are bank accounts and <Sw c="#b5703f" shape="diamond" /> clay diamonds are trading accounts. <Sw c="#d1304b" /> <b style={{ color: '#d17183' }}>Red</b> accounts were flagged by TwinTrace.
         Lines with moving dots are money moving, and <b>thicker lines mean more money</b> (clay dashed = share trades, dotted = same owner). Accounts on the <b>left</b> sent money in from outside this group; accounts on the <b>right</b> received money leaving it.
       </>
     )

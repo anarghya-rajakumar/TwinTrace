@@ -47,7 +47,7 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
     const g = Globe()(el.current)
       .backgroundColor('#f3eee4')
       .showAtmosphere(true)
-      .atmosphereColor('#9aa57a')
+      .atmosphereColor('#b88a93')
       .atmosphereAltitude(0.2)
       .polygonsData(countries)
       .polygonCapColor(() => 'rgba(214,201,172,0.95)')

@@ -50,7 +50,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
     return m
   }, [events])
   const cur = events[Math.min(step, events.length) - 1]
-  const roleStyle = { entry: ['#5d6b2f', 'diamond'], exit: ['#d1304b', 'square'], internal: [color, 'circle'], ext_in: ['#a0917c', 'ring'], ext_out: ['#a0917c', 'ring'] }
+  const roleStyle = { entry: ['#7a1f33', 'diamond'], exit: ['#d1304b', 'square'], internal: [color, 'circle'], ext_in: ['#a0917c', 'ring'], ext_out: ['#a0917c', 'ring'] }
   const path = (a, b) => {
     const [ax, ay, bx, by] = [px(pos[a][0]), py(pos[a][1]), px(pos[b][0]), py(pos[b][1])]
     if (bx <= ax) {
@@ -157,7 +157,7 @@ function TxChart({ events, color }) {
           <g pointerEvents="none">
             <rect x={Math.min(W - 196, Math.max(4, tip.x - 90))} y={Math.max(4, tip.y - 38)} width="192" height="32" rx="6" fill="#e4e0da" stroke="#c5bcb0" />
             <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#4f6d7a" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#5d6b2f" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#7a1f33" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
           </g>
         )}
       </svg>

@@ -13,7 +13,7 @@ export const typ = (k) => TYP[k] || TYP.unclassified_anomaly
 
 export const COLORS = {
   bank: '#4f6d7a', demat: '#b5703f', bankDim: '#b9c6cb', crematDim: '#dcc3ae', amber: '#d1901a', green: '#25bb80',
-  red: '#d1304b', cyan: '#5d6b2f', ink: '#393329', muted: '#8a7a63',
+  red: '#d1304b', cyan: '#7a1f33', ink: '#393329', muted: '#8a7a63',
 }
 
 export const inr = (x) => {
