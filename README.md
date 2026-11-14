@@ -3,6 +3,8 @@
 **A live radar for dirty money. It watches bank transfers and stock trades together, and catches the rings that no single rule can see.**
 Build Beyond'26 · PS 2.1
 
+**Live demo:** https://twintrace.onrender.com (free tier: the first load after idle can take about a minute)
+
 Criminals split money into tiny pieces and pass it through many accounts, then wash it again through the stock market. Banks check
 transactions one at a time, so each piece looks innocent. TwinTrace connects the **bank layer** and the **trade layer** into one graph, finds
 the rings, names the crime, and shows an investigator exactly how the money moved.
