@@ -100,7 +100,17 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
       l.curv = seen[k] > 1 ? 0.28 * seen[k] : 0
     })
     g.graphData({ nodes, links })
-    setTimeout(() => g.zoomToFit(700, 90), 700)
+    // fit symmetrically around the clicked account, so an empty side still reads as "nothing came from here"
+    setTimeout(() => {
+      const ns = g.graphData().nodes
+      if (!ns.length || !el.current) return
+      const xs = ns.map((n) => n.x || 0), ys = ns.map((n) => n.y || 0)
+      const half = Math.max(60, ...xs.map(Math.abs)) + 60
+      const spanY = Math.max(120, Math.max(...ys) - Math.min(...ys)) + 160
+      const k = Math.min(el.current.clientWidth / (2 * half), el.current.clientHeight / spanY, 4)
+      g.centerAt(0, (Math.max(...ys) + Math.min(...ys)) / 2, 700)
+      g.zoom(k, 700)
+    }, 700)
   }, [data])
 
   const up = data ? data.nodes.filter((n) => n.side === 'up' || n.side === 'both') : []
@@ -133,6 +143,11 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
         <div className="side-label" style={{ left: 22 }}>◀ where the money came from</div>
         <div className="side-label" style={{ right: 22 }}>where it went ▶</div>
         <div ref={el} style={{ position: 'absolute', inset: 0 }} />
+        {data && !loading && dir === 'both' && (data.reach.up === 0 || data.reach.down === 0) && (
+          <div className="trace-hint" style={{ top: 150, bottom: 'auto', [data.reach.up === 0 ? 'left' : 'right']: 24, transform: 'none' }}>
+            {data.reach.up === 0 ? 'No money came into this account in this period.' : 'This account did not send money on in this period.'}
+          </div>
+        )}
         {loading && <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}><div className="spin" /></div>}
         {err && <div className="empty">{err}</div>}
         <div className="trace-hint">click any account to follow the money from there · ◆ trading account ● bank account · dashed = trades · dotted = same owner</div>
