@@ -116,6 +116,7 @@ export default function App() {
   const seek = (v) => { tRef.current = v; setT(v) }
   const togglePlay = () => {
     if (!playRef.current && tRef.current >= board.days - 0.05) seek(0)
+    if (!playRef.current) { setIntro(null); setPanel((p) => p ?? 'alerts') }   // pressing play opens the alert inbox
     setPlay(!playRef.current)
   }
   const changeSpeed = (v) => { speedRef.current = v; setSpeed(v) }
