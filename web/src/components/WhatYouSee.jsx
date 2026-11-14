@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { COLORS, typ } from '../util'
 
-const STORY = {
+export const STORY = {
   fan_out: 'One account split a pile of money into many small payments to many different accounts, very quickly.',
   fan_in_structuring: 'Many accounts each sent a small payment to the same account, and every payment was just under the reporting limit (the amount banks must report), so no single payment looked suspicious.',
   fan_in: 'Many accounts sent money to the same single account in a short time.',
@@ -13,7 +13,7 @@ const STORY = {
   unclassified_anomaly: 'A group of accounts moved money in an unusual way, but it does not match one of the named patterns.',
 }
 
-const NEXT = {
+export const NEXT = {
   fan_out: 'Who received the payments? Do they share an owner or were they opened recently? Where did the original money come from?',
   fan_in_structuring: 'Do the sending accounts know each other or share an owner? What did the receiving account do with the money next?',
   fan_in: 'Who are the senders, and are they linked to each other? Where did the receiving account send the money?',
@@ -51,7 +51,7 @@ const PLAIN = {
   'net position vs gross volume': 'lots of trading but almost no real change in holdings',
   'pairs seen before (regularity)': 'these accounts had not paid each other before',
 }
-const plain = (l) => PLAIN[l] || l
+export const plain = (l) => PLAIN[l] || l
 
 function Sw({ c, shape = 'circle', dashed }) {
   const base = { display: 'inline-block', width: 11, height: 11, verticalAlign: '-1px', margin: '0 3px 0 1px', background: dashed ? 'transparent' : c, border: dashed ? `1.5px dashed ${c}` : 'none' }

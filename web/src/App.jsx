@@ -12,6 +12,7 @@ import WhatIf from './components/WhatIf.jsx'
 import PlantPanel from './components/PlantPanel.jsx'
 import Toasts from './components/Toasts.jsx'
 import WhatYouSee from './components/WhatYouSee.jsx'
+import ChatHelp from './components/ChatHelp.jsx'
 
 const TOUR = [
   ['Welcome to the board', 'Every dot is an account. Circles are bank accounts, diamonds are trading accounts. The glowing coloured clusters are laundering rings TwinTrace has flagged, hiding among thousands of normal accounts.'],
@@ -43,7 +44,7 @@ export default function App() {
   const [focusSet, setFocusSet] = useState(null)
   const [tab, setTab] = useState(() => { try { const t = localStorage.getItem('tt-tab'); return ['case', 'lab', 'plant'].includes(t) ? t : 'case' } catch (e) { return 'case' } })
   const [present, setPresent] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(false)   // the side panel starts collapsed too; opening an alert or a tab expands it
   const openTab = (t) => { setTab(t); setDrawerOpen(true) }
   useEffect(() => { try { localStorage.setItem('tt-tab', tab) } catch (e) { /* ignore */ } }, [tab])
   const [leftOpen, setLeftOpen] = useState(false)   // the inbox starts collapsed and is never auto-opened
@@ -357,6 +358,7 @@ export default function App() {
       <div className="timebar">
         <Timeline board={board} t={t} playing={playing} speed={speed} onToggle={togglePlay} onSpeed={changeSpeed} onSeek={seek} thr={thr} firedCount={firedCount} />
       </div>
+      <ChatHelp board={board} selectedId={selectedId} shown={board.alerts.filter((a) => a.score >= thr[a.grp]).length} total={board.alerts.length} accounts={board.n_accounts} />
       {rebooting && (
         <div className="reboot">
           <div>
