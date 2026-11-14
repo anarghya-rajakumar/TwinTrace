@@ -1,0 +1,78 @@
+/* Calmer, "clean modern fintech" refresh. Loaded after theme.css; only used by the .app2 shell. */
+:root {
+  --bg: #07090f; --bg2: #0b0f19; --panel: rgba(14, 18, 30, 0.88); --panel-solid: #0e121e;
+  --line: #1b2234; --line2: #283148; --ink: #e4e9f5; --muted: #7d889f;
+  --accent: #7c8cff;
+}
+.app2 { position: fixed; inset: 0; display: grid; grid-template-rows: 52px 1fr 84px; grid-template-columns: 52px minmax(0, 1fr); grid-template-areas: 'top top' 'rail board' 'time time'; background: var(--bg); }
+.app2 .top { grid-area: top; background: var(--bg); border-bottom: 1px solid var(--line); gap: 14px; padding: 0 18px 0 14px; }
+.app2 .kpi { border: 0; background: transparent; padding: 2px 10px; min-width: 0; }
+.app2 .kpi b { font-size: 15px; font-weight: 600; }
+.app2 .kpi span { letter-spacing: 0.04em; text-transform: none; font-size: 11px; }
+.app2 .btn { border-radius: 8px; background: transparent; border-color: var(--line2); font-weight: 500; }
+.app2 .btn:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--accent); }
+.app2 .btn.ghost { border-color: transparent; color: var(--muted); }
+.app2 .btn.ghost:hover { color: var(--ink); }
+.app2 .btn.primary { background: var(--accent); color: #0a0d18; border-color: transparent; box-shadow: none; font-weight: 600; }
+.app2 .btn.on { border-color: var(--accent); color: var(--accent); background: rgba(124, 140, 255, 0.1); }
+
+.rail { grid-area: rail; display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 14px; border-right: 1px solid var(--line); background: var(--bg); z-index: 6; }
+.rail-btn { position: relative; width: 36px; height: 36px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--muted); font-size: 16px; display: grid; place-items: center; transition: all 0.15s; }
+.rail-btn:hover { color: var(--ink); background: rgba(255, 255, 255, 0.05); }
+.rail-btn.on { color: var(--accent); background: rgba(124, 140, 255, 0.12); border-color: rgba(124, 140, 255, 0.35); }
+.rail-badge { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--red); color: #fff; font: 600 10px/16px var(--mono); font-style: normal; text-align: center; }
+
+.app2 .board-wrap { grid-area: board; position: relative; background: radial-gradient(1100px 650px at 50% 45%, #0c1428 0%, #07090f 72%); }
+.app2 .board-wrap::before { display: none; }
+.app2 .timebar { grid-area: time; background: var(--bg); border-top: 1px solid var(--line); }
+
+/* the explainer floats over the board instead of pushing it down */
+.app2 .board-wrap > .wys { position: absolute; top: 12px; left: 12px; width: min(360px, 38%); margin: 0; z-index: 8; background: var(--panel); border-color: var(--line); }
+.app2 .wys-h { color: var(--muted); font-weight: 600; }
+.app2 .wys ul { max-height: 22vh; }
+.app2 .hud-tr { right: auto; left: 50%; transform: translateX(-50%); top: 12px; }
+.app2 .legend { background: var(--panel); border-color: var(--line); bottom: 12px; }
+.app2 .toasts { top: 56px; left: 50%; transform: translateX(-50%); align-items: center; max-width: 440px; }
+
+/* one floating panel */
+.panel-float { position: absolute; top: 12px; right: 12px; bottom: 12px; width: 410px; max-width: calc(100% - 24px); z-index: 20; display: flex; flex-direction: column; overflow: hidden; background: var(--panel); border: 1px solid var(--line2); border-radius: 16px; backdrop-filter: blur(14px); box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55); transform: translateX(calc(100% + 24px)); opacity: 0; pointer-events: none; transition: transform 0.3s cubic-bezier(.2, .8, .2, 1), opacity 0.25s; }
+.panel-float.open { transform: none; opacity: 1; pointer-events: auto; }
+.pf-h { display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 10px; border-bottom: 1px solid var(--line); }
+.pf-tabs { display: flex; gap: 2px; }
+.pf-tabs button { padding: 6px 11px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 500; }
+.pf-tabs button:hover { color: var(--ink); }
+.pf-tabs button.on { background: rgba(124, 140, 255, 0.14); color: var(--accent); }
+.pf-x { width: 28px; height: 28px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); }
+.pf-x:hover { background: rgba(255, 255, 255, 0.06); color: var(--ink); }
+.pf-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.panel-float .drawer-body { flex: 1; overflow-y: auto; padding: 16px; }
+
+/* intro */
+.hero { position: absolute; left: 50%; top: 14%; transform: translateX(-50%); width: min(640px, 90%); text-align: center; z-index: 12; pointer-events: none; animation: fadein 0.8s; }
+.hero .btn { pointer-events: auto; margin-top: 14px; }
+.hero-eyebrow { font: 500 12px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.hero h1 { margin: 0; font-size: clamp(24px, 3.4vw, 40px); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; text-shadow: 0 2px 30px rgba(0, 0, 0, 0.8); }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-stats { display: flex; justify-content: center; gap: 34px; margin-top: 18px; }
+.hero-stats b { display: block; font: 600 26px var(--mono); }
+.hero-stats span { font-size: 11.5px; color: var(--muted); }
+.cta { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; gap: 10px; z-index: 12; animation: fadein 0.6s; }
+.app2.intro .board-wrap > .wys, .app2.intro .legend, .app2.intro .hud-tr { opacity: 0; pointer-events: none; }
+.app2 .board-wrap > .wys, .app2 .legend, .app2 .hud-tr { transition: opacity 0.5s; }
+
+.app2 .chat-fab { bottom: 100px; right: 18px; width: 46px; height: 46px; font-size: 19px; background: var(--accent); color: #0a0d18; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); }
+.app2.panel-open .chat-fab { right: 440px; }
+.app2 .tour { border-color: var(--accent); bottom: 12px; }
+.app2 .tour h4 { color: var(--accent); }
+
+/* present mode: just the board and the timeline */
+.app2.present { grid-template-rows: 0 1fr 84px; grid-template-columns: 0 minmax(0, 1fr); }
+.app2.present .top, .app2.present .rail, .app2.present .panel-float, .app2.present .board-wrap > .wys { opacity: 0; pointer-events: none; overflow: hidden; border-width: 0; }
+.app2.present .chat-fab { display: none; }
+
+@media (max-width: 900px) {
+  .app2 .board-wrap > .wys { width: calc(100% - 24px); }
+  .app2 .kpis { display: none; }
+  .panel-float { width: calc(100% - 24px); }
+  .app2.panel-open .chat-fab { right: 18px; }
+}

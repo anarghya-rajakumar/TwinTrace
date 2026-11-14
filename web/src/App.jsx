@@ -44,10 +44,13 @@ export default function App() {
   const [focusSet, setFocusSet] = useState(null)
   const [tab, setTab] = useState(() => { try { const t = localStorage.getItem('tt-tab'); return ['case', 'lab', 'plant'].includes(t) ? t : 'case' } catch (e) { return 'case' } })
   const [present, setPresent] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)   // the side panel starts collapsed too; opening an alert or a tab expands it
-  const openTab = (t) => { setTab(t); setDrawerOpen(true) }
+  const [panel, setPanel] = useState(null)   // null | 'alerts' | 'case' | 'lab' | 'plant': one floating panel, closed on load
+  const leftOpen = panel === 'alerts'
+  const drawerOpen = panel !== null && panel !== 'alerts'
+  const setLeftOpen = (v) => setPanel((p) => { const on = typeof v === 'function' ? v(p === 'alerts') : v; return on ? 'alerts' : (p === 'alerts' ? null : p) })
+  const setDrawerOpen = (v) => setPanel((p) => { const cur = p !== null && p !== 'alerts'; const on = typeof v === 'function' ? v(cur) : v; return on ? (cur ? p : tab) : (cur ? null : p) })
+  const openTab = (t) => { setTab(t); setPanel(t) }
   useEffect(() => { try { localStorage.setItem('tt-tab', tab) } catch (e) { /* ignore */ } }, [tab])
-  const [leftOpen, setLeftOpen] = useState(false)   // the inbox starts collapsed and is never auto-opened
   const [rebooting, setRebooting] = useState(false)
   const [trace, setTrace] = useState(null)
   const [toasts, setToasts] = useState([])
@@ -56,7 +59,10 @@ export default function App() {
   const [typFilter, setTypFilter] = useState(new Set())
   const [tour, setTour] = useState(-1)
   const [injected, setInjected] = useState(0)
-  const [view3d, setView3d] = useState(() => { try { return localStorage.getItem('tt-view') === '3d' } catch (e) { return false } })
+  const [intro, setIntro] = useState(null)   // null | 'hero' (auto-playing opening) | 'cta' (offer the tour)
+  const introRef = useRef(false)
+  const introDone = useRef(false)
+  const [view3d, setView3d] = useState(() => { try { return localStorage.getItem('tt-view') !== '2d' } catch (e) { return true } })
   const [orbit, setOrbit] = useState(true)
   const switchView = (v) => {
     try { localStorage.setItem('tt-view', v ? '3d' : '2d') } catch (e) { /* ignore */ }
@@ -114,6 +120,20 @@ export default function App() {
   }
   const changeSpeed = (v) => { speedRef.current = v; setSpeed(v) }
 
+  // opening: once the globe is ready, replay the 90 days by itself under a headline, then offer the tour
+  introRef.current = intro === 'hero'
+  useEffect(() => {
+    if (!ready || !board || introDone.current) return
+    introDone.current = true
+    setIntro('hero'); seek(0); changeSpeed(14); stopAt.current = null; setPlay(true)
+  }, [ready, board])
+  useEffect(() => { if (intro === 'hero' && !playing) setIntro('cta') }, [playing, intro])
+  useEffect(() => {
+    if (intro !== 'cta') return
+    const id = setTimeout(() => setIntro(null), 12000)
+    return () => clearTimeout(id)
+  }, [intro])
+
   const keyAct = useRef(null)
   keyAct.current = (e) => {
     if (!board || e.ctrlKey || e.metaKey || e.altKey) return
@@ -159,6 +179,7 @@ export default function App() {
     setTimeout(() => setToasts((p) => p.filter((x) => x.id !== id)), ms)
   }
   const onFire = useCallback((a) => {
+    if (introRef.current) return   // the opening shows ripples only; no toasts
     pushToast(`<b>${typ(a.typ).label}</b> detected · <span style="font-family:var(--mono)">${a.id}</span> · risk ${a.score.toFixed(0)}`, typ(a.typ).color)
   }, [])
   const selectAlert = (a, zoom = true) => {
@@ -269,90 +290,118 @@ export default function App() {
 
   const sel = selectedId && board.alerts.find((a) => a.id === selectedId)
   return (
-    <div className={'app' + (leftOpen ? '' : ' no-left') + (drawerOpen ? '' : ' no-drawer') + (present ? ' present' : '')}>
-      <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} filters={filters} setFilters={setFilters}
-        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => { setPresent(false); setLeftOpen(true); setDrawerOpen(true); setTour(0) }} onPresent={() => setPresent(true)} tab={tab} setTab={openTab} injected={injected}
+    <div className={'app2' + (panel ? ' panel-open' : '') + (present ? ' present' : '') + (intro === 'hero' ? ' intro' : '')}>
+      <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} showTruth={showTruth} setShowTruth={setShowTruth}
+        onTour={() => { setPresent(false); setIntro(null); setPanel('alerts'); setTour(0) }} onPresent={() => setPresent(true)}
         onLogo={() => { setRebooting(true); setTimeout(() => window.location.reload(), 1050) }} />
-      <button className="inbox-toggle" onClick={() => setLeftOpen(!leftOpen)} aria-expanded={leftOpen} title={(leftOpen ? 'Collapse' : 'Open') + ' the alert inbox (I)'}>
-        <span className="chev">{leftOpen ? '◀' : '▶'}</span><span className="vt">Alert inbox</span><span className="badge">{firedCount}</span>
-      </button>
-      <button className="inbox-toggle drawer-toggle" onClick={() => setDrawerOpen(!drawerOpen)} aria-expanded={drawerOpen}
-        title={(drawerOpen ? 'Collapse' : 'Open') + ' the case file / what-if / plant panel (D)'}>
-        <span className="chev">{drawerOpen ? '◀' : '▶'}</span><span className="vt">Case · What-if · Plant</span>
-      </button>
-      <div className="left">
-        <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
-      </div>
+      <nav className="rail" aria-label="Panels">
+        {[['alerts', '⚑', 'Alert inbox (I)', firedCount], ['case', '▣', 'Case file (1)', 0], ['lab', '⚙', 'What-if lab (2)', 0], ['plant', '＋', 'Plant a ring (3)', injected]].map(([k, ic, label, badge]) => (
+          <button key={k} className={'rail-btn' + (panel === k ? ' on' : '')} title={label} aria-label={label} aria-pressed={panel === k}
+            onClick={() => (panel === k ? setPanel(null) : k === 'alerts' ? setPanel('alerts') : openTab(k))}>
+            <span>{ic}</span>{badge > 0 && <i className="rail-badge">{badge}</i>}
+          </button>
+        ))}
+      </nav>
       <div className="board-wrap">
         <WhatYouSee kind="board" globe={view3d} />
         <div className="board-stage">
-        {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
-        {React.createElement(view3d ? BoardGlobe : Board, { key: boardKey + (view3d ? 'g' : 'd2'), ref: boardRef, orbit, onAlertClick: (ai) => selectAlert(board.alerts[ai]), board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
-        <Toasts items={toasts} />
-        {present && <button className="btn sm present-exit" onClick={() => setPresent(false)}>✕ Exit present mode (Esc)</button>}
-        <div className="hud-tr">
-          <div className="seg" title="Flat network of accounts, or a globe with one point per flagged ring">
-            <button className={!view3d ? 'on' : ''} onClick={() => view3d && switchView(false)}>2D</button>
-            <button className={view3d ? 'on' : ''} onClick={() => !view3d && switchView(true)}>Globe</button>
+          {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
+          {React.createElement(view3d ? BoardGlobe : Board, { key: boardKey + (view3d ? 'g' : 'd2'), ref: boardRef, orbit, onAlertClick: (ai) => selectAlert(board.alerts[ai]), board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
+          <Toasts items={toasts} />
+          {present && <button className="btn sm present-exit" onClick={() => setPresent(false)}>✕ Exit present mode (Esc)</button>}
+          <div className="hud-tr">
+            <div className="seg" title="Flat network of accounts, or a globe with one point per flagged ring">
+              <button className={!view3d ? 'on' : ''} onClick={() => view3d && switchView(false)}>2D</button>
+              <button className={view3d ? 'on' : ''} onClick={() => !view3d && switchView(true)}>Globe</button>
+            </div>
+            {view3d && <button className={'btn sm' + (orbit ? ' on' : '')} onClick={() => setOrbit(!orbit)} title="Slowly rotate the view">⟳ orbit</button>}
+            <div className="seg" title="Which layer to show">
+              <button className={filters.bank ? 'on' : ''} onClick={() => setFilters({ ...filters, bank: !filters.bank })}>● Bank</button>
+              <button className={filters.trade ? 'on' : ''} onClick={() => setFilters({ ...filters, trade: !filters.trade })}>◆ Trades</button>
+            </div>
+            <button className="btn sm" onClick={() => { clearSel(); boardRef.current.fit() }}>⤢ fit</button>
           </div>
-          {view3d && <button className={'btn sm' + (orbit ? ' on' : '')} onClick={() => setOrbit(!orbit)} title="Slowly rotate the view">⟳ orbit</button>}
-          <div className="seg" title="Which layer to show">
-            <button className={filters.bank ? 'on' : ''} onClick={() => setFilters({ ...filters, bank: !filters.bank })}>● Bank</button>
-            <button className={filters.trade ? 'on' : ''} onClick={() => setFilters({ ...filters, trade: !filters.trade })}>◆ Trades</button>
+          <div className="legend">
+            {view3d ? (
+              <>
+                <div><i style={{ background: '#ff3b5c' }} /> one point = one flagged ring (colour = crime type)</div>
+                <div>drag to spin · click a point to open it</div>
+              </>
+            ) : (
+              <>
+                <div><i style={{ background: '#6c93e0' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
+                <div><i style={{ background: '#ff3b5c' }} /> flagged ring (colour = typology)</div>
+              </>
+            )}
+            {showTruth && <div><i style={{ background: 'transparent', border: '1.5px solid #2ee59d' }} /> real ring <i style={{ background: 'transparent', border: '1.5px dashed #ff3b5c', marginLeft: 8 }} /> false alarm <i style={{ background: 'transparent', border: '1.5px dashed #ffb020', marginLeft: 8 }} /> missed</div>}
+            <div>click any account to trace its money</div>
           </div>
-          <button className="btn sm" onClick={() => setLeftOpen(!leftOpen)}>{leftOpen ? '◀ hide inbox' : '▶ inbox'}</button>
-          <button className="btn sm" onClick={() => { clearSel(); boardRef.current.fit() }}>⤢ fit</button>
-        </div>
-        <div className="legend">
-          {view3d ? (
-            <>
-              <div><i style={{ background: '#ff3b5c', boxShadow: '0 0 8px #ff3b5c' }} /> one glowing point = one flagged ring (colour = crime type)</div>
-              <div>drag to spin · click a point to open it</div>
-            </>
-          ) : (
-            <>
-              <div><i style={{ background: '#6c93e0' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
-              <div><i style={{ background: '#ff3b5c', boxShadow: '0 0 8px #ff3b5c' }} /> flagged ring (colour = typology)</div>
-            </>
+
+          {intro === 'hero' && (
+            <div className="hero">
+              <div className="hero-eyebrow">TwinTrace · cross-layer crime radar</div>
+              <h1>Following dirty money across <em>bank transfers</em> and <em>stock trades</em>.</h1>
+              <div className="hero-stats">
+                <div><b>{Math.floor(t)}</b><span>of 90 days replayed</span></div>
+                <div><b>{firedCount}</b><span>rings caught so far</span></div>
+                <div><b>{board.n_accounts.toLocaleString()}</b><span>accounts watched</span></div>
+              </div>
+              <button className="btn ghost sm" onClick={() => { setPlay(false); seek(board.days) }}>Skip intro</button>
+            </div>
           )}
-          {showTruth && <div><i style={{ background: 'transparent', border: '1.5px solid #2ee59d' }} /> real ring <i style={{ background: 'transparent', border: '1.5px dashed #ff3b5c', marginLeft: 8 }} /> false alarm <i style={{ background: 'transparent', border: '1.5px dashed #ffb020', marginLeft: 8 }} /> missed</div>}
-          <div>click any account to trace its money</div>
-        </div>
-        {trace && <TraceView account={trace} onClose={() => setTrace(null)} onOpenAlert={openAlertById} />}
-        {tour >= 0 && (
-          <div className="tour">
-            <h4>{tour + 1}/{TOUR.length} · {TOUR[tour][0]}</h4>
-            <p>{TOUR[tour][1]}</p>
-            <div className="nav">
-              <div className="dots">{TOUR.map((_, i) => <i key={i} className={i === tour ? 'on' : ''} />)}</div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn sm" onClick={() => setTour(-1)}>Exit</button>
-                {tour > 0 && <button className="btn sm" onClick={() => setTour(tour - 1)}>← Back</button>}
-                <button className="btn sm primary" onClick={() => (tour + 1 < TOUR.length ? setTour(tour + 1) : setTour(-1))}>{tour + 1 < TOUR.length ? 'Next →' : 'Finish'}</button>
+          {intro === 'cta' && (
+            <div className="cta">
+              <button className="btn primary" onClick={() => { setIntro(null); setPanel('alerts'); setTour(0) }}>▶ Take the 60-second tour</button>
+              <button className="btn ghost" onClick={() => setIntro(null)}>Explore on my own</button>
+            </div>
+          )}
+
+          {trace && <TraceView account={trace} onClose={() => setTrace(null)} onOpenAlert={openAlertById} />}
+          {tour >= 0 && (
+            <div className="tour">
+              <h4>{tour + 1}/{TOUR.length} · {TOUR[tour][0]}</h4>
+              <p>{TOUR[tour][1]}</p>
+              <div className="nav">
+                <div className="dots">{TOUR.map((_, i) => <i key={i} className={i === tour ? 'on' : ''} />)}</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn sm" onClick={() => setTour(-1)}>Exit</button>
+                  {tour > 0 && <button className="btn sm" onClick={() => setTour(tour - 1)}>← Back</button>}
+                  <button className="btn sm primary" onClick={() => (tour + 1 < TOUR.length ? setTour(tour + 1) : setTour(-1))}>{tour + 1 < TOUR.length ? 'Next →' : 'Finish'}</button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        </div>
-      </div>
-      <div className="right">
-        <div className="tabs">
-          <button className={tab === 'case' ? 'on' : ''} onClick={() => openTab('case')} title="Case file (1)">⚑ Case file</button>
-          <button className={tab === 'lab' ? 'on' : ''} onClick={() => openTab('lab')} title="What-if lab (2)">⚙ What-if lab</button>
-          <button className={tab === 'plant' ? 'on' : ''} onClick={() => openTab('plant')} title="Plant a ring (3)">＋ Plant ring</button>
-        </div>
-        <div className="drawer-body" key={tab + (tab === 'case' ? selectedId : '')}>
-          {tab === 'case' && (
-            <CaseFile alertId={selectedId} thr={thr} onTrace={(a) => setTrace(a)} onZoom={() => sel && boardRef.current.zoomToAlert(sel.i)}
-              onReplay={(a) => { seek(Math.max(0, a.t_start / 86400 - 1)); changeSpeed(4); stopAt.current = Math.min(board.days, a.t_end / 86400 + 1.5); setPlay(true); sel && boardRef.current.zoomToAlert(sel.i) }}
-              onLower={(a) => lowerFor(grpOf(a.layer), a.score)} />
           )}
-          {tab === 'lab' && <WhatIf thr={thr} setThr={setThr} defaults={defaults} m={metrics} methods={board.methods} loading={mLoading} floor={board.min_score}
-            shown={board.alerts.filter((a) => a.score >= thr[a.grp]).length} total={board.alerts.length} accounts={board.n_accounts} />}
-          {tab === 'plant' && (
-            <PlantPanel day={t} onPlant={onPlant} onWatch={watch} onOpenAlert={openAlertById} injected={injected} onClear={clearPlanted}
-              onLower={(res) => { lowerFor(res.closest.layer === 'money' ? 'money' : 'trade', res.closest.score); openTab('lab') }} />
-          )}
+
+          <aside className={'panel-float' + (panel ? ' open' : '')} aria-hidden={!panel}>
+            <div className="pf-h">
+              <div className="pf-tabs">
+                {[['alerts', 'Alerts'], ['case', 'Case file'], ['lab', 'What-if'], ['plant', 'Plant']].map(([k, l]) => (
+                  <button key={k} className={panel === k ? 'on' : ''} onClick={() => (k === 'alerts' ? setPanel('alerts') : openTab(k))}>{l}</button>
+                ))}
+              </div>
+              <button className="pf-x" onClick={() => setPanel(null)} title="Close (D)" aria-label="Close panel">✕</button>
+            </div>
+            {panel === 'alerts' && (
+              <div className="pf-body">
+                <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
+              </div>
+            )}
+            {panel && panel !== 'alerts' && (
+              <div className="drawer-body" key={panel + (panel === 'case' ? selectedId : '')}>
+                {panel === 'case' && (
+                  <CaseFile alertId={selectedId} thr={thr} onTrace={(a) => setTrace(a)} onZoom={() => sel && boardRef.current.zoomToAlert(sel.i)}
+                    onReplay={(a) => { seek(Math.max(0, a.t_start / 86400 - 1)); changeSpeed(4); stopAt.current = Math.min(board.days, a.t_end / 86400 + 1.5); setPlay(true); sel && boardRef.current.zoomToAlert(sel.i) }}
+                    onLower={(a) => lowerFor(grpOf(a.layer), a.score)} />
+                )}
+                {panel === 'lab' && <WhatIf thr={thr} setThr={setThr} defaults={defaults} m={metrics} methods={board.methods} loading={mLoading} floor={board.min_score}
+                  shown={board.alerts.filter((a) => a.score >= thr[a.grp]).length} total={board.alerts.length} accounts={board.n_accounts} />}
+                {panel === 'plant' && (
+                  <PlantPanel day={t} onPlant={onPlant} onWatch={watch} onOpenAlert={openAlertById} injected={injected} onClear={clearPlanted}
+                    onLower={(res) => { lowerFor(res.closest.layer === 'money' ? 'money' : 'trade', res.closest.score); openTab('lab') }} />
+                )}
+              </div>
+            )}
+          </aside>
         </div>
       </div>
       <div className="timebar">
