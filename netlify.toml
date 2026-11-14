@@ -1,0 +1,15 @@
+# Static copy of the TwinTrace front end. The prebuilt app in web/dist is published as is;
+# every /api call is forwarded to the Python backend on Render.
+[build]
+  publish = "web/dist"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://twintrace.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
