@@ -1,7 +1,7 @@
 import React from 'react'
 import { pct } from '../util'
 
-export default function TopBar({ metrics, base, alertsFired, showTruth, setShowTruth, onTour, onLogo, onPresent }) {
+export default function TopBar({ metrics, base, alertsFired, showTruth, setShowTruth, onTour, onLogo, onPresent, dark, onTheme }) {
   return (
     <div className="top">
       <div className="logo" onClick={onLogo} role="button" tabIndex={0} title="Click to re-scan the network" onKeyDown={(e) => e.key === 'Enter' && onLogo && onLogo()}>
@@ -15,6 +15,7 @@ export default function TopBar({ metrics, base, alertsFired, showTruth, setShowT
       </div>
       <div className="spacer" />
       <button className={'btn ghost' + (showTruth ? ' on' : '')} onClick={() => setShowTruth(!showTruth)} title="Overlay the synthetic ground truth: real rings, false alarms, misses">◎ Reveal truth</button>
+      <button className="btn ghost" onClick={onTheme} title={dark ? 'Switch to light mode' : 'Switch to dark mode'} aria-label="Toggle dark mode">{dark ? '☀ Light' : '☾ Dark'}</button>
       <button className="btn ghost" onClick={onPresent} title="Hide panels for a projector (P)">⛶ Present</button>
       <button className="btn primary" onClick={onTour}>▶ Guided demo</button>
     </div>

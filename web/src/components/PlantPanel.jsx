@@ -48,7 +48,7 @@ export default function PlantPanel({ day, onPlant, onWatch, onOpenAlert, onLower
   const sizeText = size ? `${size} ${noun}` : `a random number of ${noun} (usually ${sizeRange[0]}–${sizeRange[1]})`
   const reset = () => { setKind('mule_chain'); setStealth(0.6); setSize(0) }
   const Tip = ({ t }) => <span className="tip" tabIndex={0} data-tip={t}>?</span>
-  const val = { fontFamily: 'var(--mono)', color: '#7a1f33' }
+  const val = { fontFamily: 'var(--mono)', color: '#2f7a74' }
   return (
     <div>
       <div className="sect" style={{ marginTop: 0 }}>

@@ -50,7 +50,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
     return m
   }, [events])
   const cur = events[Math.min(step, events.length) - 1]
-  const roleStyle = { entry: ['#7a1f33', 'diamond'], exit: ['#b0303a', 'square'], internal: [color, 'circle'], ext_in: ['#a0917c', 'ring'], ext_out: ['#a0917c', 'ring'] }
+  const roleStyle = { entry: ['#2f7a74', 'diamond'], exit: ['#d1304b', 'square'], internal: [color, 'circle'], ext_in: ['#a0917c', 'ring'], ext_out: ['#a0917c', 'ring'] }
   const path = (a, b) => {
     const [ax, ay, bx, by] = [px(pos[a][0]), py(pos[a][1]), px(pos[b][0]), py(pos[b][1])]
     if (bx <= ax) {
@@ -73,7 +73,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
             if (!pos[e.src] || !pos[e.dst] || e.src === e.dst) return null
             const fi = firstIdx[`${e.src}|${e.dst}`]
             const live = e.kind === 'external' || e.kind === 'owner' ? true : fi === undefined || fi < step
-            const c = e.kind === 'external' ? '#ab9e8b' : e.kind === 'trade' ? '#8b6b4e' : e.kind === 'owner' ? '#706351' : color
+            const c = e.kind === 'external' ? '#ab9e8b' : e.kind === 'trade' ? '#b5703f' : e.kind === 'owner' ? '#706351' : color
             return (
               <g key={i} onMouseEnter={() => setTip({ x: (px(pos[e.src][0]) + px(pos[e.dst][0])) / 2, y: (py(pos[e.src][1]) + py(pos[e.dst][1])) / 2 - 12, t: `${short(e.src)} → ${short(e.dst)} · ${e.amount ? inr(e.amount) : 'owner link'}${e.n > 1 ? ` · ${e.n}×` : ''}` })}>
                 <path d={path(e.src, e.dst)} fill="none" stroke="transparent" strokeWidth="12" />
@@ -102,7 +102,7 @@ function MiniFlow({ flow, events, color, onTrace }) {
           {tip && (
             <g pointerEvents="none">
               <rect x={Math.min(W - 230, Math.max(4, tip.x - 100))} y={Math.max(4, tip.y - 20)} width="226" height="20" rx="6" fill="#e4e0da" stroke="#c5bcb0" />
-              <text x={Math.min(W - 230, Math.max(4, tip.x - 100)) + 8} y={Math.max(4, tip.y - 20) + 14} fontSize="10" fill="#4d6b78" fontFamily="monospace">{tip.t}</text>
+              <text x={Math.min(W - 230, Math.max(4, tip.x - 100)) + 8} y={Math.max(4, tip.y - 20) + 14} fontSize="10" fill="#4f6d7a" fontFamily="monospace">{tip.t}</text>
             </g>
           )}
         </svg>
@@ -148,7 +148,7 @@ function TxChart({ events, color }) {
         )}
         <polyline fill="none" stroke={color} strokeOpacity="0.35" points={events.filter((e) => e.kind === 'money').map((e) => `${X(e.t)},${Y(e.amt)}`).join(' ')} />
         {events.map((e, i) => (
-          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#8b6b4e' : color} opacity="0.9" stroke="#e1ddd6"
+          <circle key={i} cx={X(e.t)} cy={Y(e.amt)} r={4.2} fill={e.kind === 'trade' ? '#b5703f' : color} opacity="0.9" stroke="#e1ddd6"
             onMouseEnter={() => setTip({ x: X(e.t), y: Y(e.amt), e })} />
         ))}
         <text x={L} y={H - 6} fontSize="9" fill="#92816a" fontFamily="monospace">{fmtDayTime(t0)}</text>
@@ -156,8 +156,8 @@ function TxChart({ events, color }) {
         {tip && (
           <g pointerEvents="none">
             <rect x={Math.min(W - 196, Math.max(4, tip.x - 90))} y={Math.max(4, tip.y - 38)} width="192" height="32" rx="6" fill="#e4e0da" stroke="#c5bcb0" />
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#4d6b78" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
-            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#7a1f33" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 13} fontSize="10" fill="#4f6d7a" fontFamily="monospace">{short(tip.e.src)} → {short(tip.e.dst)}</text>
+            <text x={Math.min(W - 196, Math.max(4, tip.x - 90)) + 8} y={Math.max(4, tip.y - 38) + 26} fontSize="10" fill="#2f7a74" fontFamily="monospace">{inr(tip.e.amt)}{tip.e.price ? ` · ${tip.e.qty}@${tip.e.price.toFixed(1)} (ref ${tip.e.ref.toFixed(1)})` : ''}</text>
           </g>
         )}
       </svg>

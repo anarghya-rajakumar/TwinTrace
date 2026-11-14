@@ -1,19 +1,19 @@
 export const TYP = {
-  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#c8553d', glyph: '⇶' },
-  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#c9962b', glyph: '⇉' },
-  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#8c8a3c', glyph: '⇉' },
-  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#b04a6a', glyph: '↻' },
-  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#9b2c2c', glyph: '⛓' },
-  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#6b4a78', glyph: '⟳' },
-  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#2f6f6a', glyph: '⇅' },
-  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#3f5f86', glyph: '⛛' },
-  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#7d746a', glyph: '◇' },
+  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#e0561f', glyph: '⇶' },
+  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#d99a00', glyph: '⇉' },
+  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#a8861a', glyph: '⇉' },
+  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#c2185b', glyph: '↻' },
+  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#d32f2f', glyph: '⛓' },
+  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#6a3fa0', glyph: '⟳' },
+  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#0f7b8a', glyph: '⇅' },
+  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#2f5fa8', glyph: '⛛' },
+  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#6b6258', glyph: '◇' },
 }
 export const typ = (k) => TYP[k] || TYP.unclassified_anomaly
 
 export const COLORS = {
-  bank: '#4d6b78', demat: '#8b6b4e', bankDim: '#b9c6cb', crematDim: '#dcc3ae', amber: '#c98a1a', green: '#25bb80',
-  red: '#b0303a', cyan: '#7a1f33', ink: '#393329', muted: '#8a7a63',
+  bank: '#4f6d7a', demat: '#b5703f', bankDim: '#b9c6cb', crematDim: '#dcc3ae', amber: '#d1901a', green: '#25bb80',
+  red: '#d1304b', cyan: '#2f7a74', ink: '#393329', muted: '#8a7a63',
 }
 
 export const inr = (x) => {

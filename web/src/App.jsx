@@ -44,6 +44,11 @@ export default function App() {
   const [focusSet, setFocusSet] = useState(null)
   const [tab, setTab] = useState(() => { try { const t = localStorage.getItem('tt-tab'); return ['case', 'lab', 'plant'].includes(t) ? t : 'case' } catch (e) { return 'case' } })
   const [present, setPresent] = useState(false)
+  const [dark, setDark] = useState(() => { try { return localStorage.getItem('tt-theme') === 'dark' } catch (e) { return false } })
+  useEffect(() => {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+    try { localStorage.setItem('tt-theme', dark ? 'dark' : 'light') } catch (e) { /* ignore */ }
+  }, [dark])
   const [panel, setPanel] = useState(null)   // null | 'alerts' | 'case' | 'lab' | 'plant': one floating panel, closed on load
   const leftOpen = panel === 'alerts'
   const drawerOpen = panel !== null && panel !== 'alerts'
@@ -292,7 +297,7 @@ export default function App() {
   const sel = selectedId && board.alerts.find((a) => a.id === selectedId)
   return (
     <div className={'app2' + (panel ? ' panel-open' : '') + (present ? ' present' : '') + (intro === 'hero' ? ' intro' : '')}>
-      <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} showTruth={showTruth} setShowTruth={setShowTruth}
+      <TopBar dark={dark} onTheme={() => setDark(!dark)} metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} showTruth={showTruth} setShowTruth={setShowTruth}
         onTour={() => { setPresent(false); setIntro(null); setPanel('alerts'); setTour(0) }} onPresent={() => setPresent(true)}
         onLogo={() => { setRebooting(true); setTimeout(() => window.location.reload(), 1050) }} />
       <nav className="rail" aria-label="Panels">

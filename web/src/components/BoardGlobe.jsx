@@ -47,7 +47,7 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
     const g = Globe()(el.current)
       .backgroundColor('#f3eee4')
       .showAtmosphere(true)
-      .atmosphereColor('#b88a93')
+      .atmosphereColor('#8fb8b2')
       .atmosphereAltitude(0.2)
       .polygonsData(countries)
       .polygonCapColor(() => 'rgba(214,201,172,0.95)')
@@ -129,7 +129,7 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
           const lat = c.lat + Math.sin(ang) * rad, lng = c.lng + Math.cos(ang) * rad / Math.max(0.35, Math.cos(c.lat * 0.01745))
           pos.set(idx, { lat, lng })
           const n = board.nodes[idx]
-          pts.push({ kind: 'acct', id: n.id, ai: selAi, lat, lng, alt: 0.012, r: 0.2, color: n.k === 'd' ? '#8b6b4e' : '#4d6b78',
+          pts.push({ kind: 'acct', id: n.id, ai: selAi, lat, lng, alt: 0.012, r: 0.2, color: n.k === 'd' ? '#b5703f' : '#4f6d7a',
             label: `<div class="graph-tooltip"><b>${n.id}</b><br/>${n.k === 'd' ? 'trading account' : 'bank account'}<br/><span style="color:#92816a">click to trace the money</span></div>` })
         })
         const agg = new Map()

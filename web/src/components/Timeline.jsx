@@ -30,7 +30,7 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
     window.addEventListener('pointerup', up)
   }
   const sp = board.splits
-  const zones = [['TUNE · model learns', sp.tune, '#4d6b78'], ['VAL', sp.val, '#bdb3a4'], ['TEST · never seen', sp.test, '#cbc3b8']]
+  const zones = [['TUNE · model learns', sp.tune, '#4f6d7a'], ['VAL', sp.val, '#bdb3a4'], ['TEST · never seen', sp.test, '#cbc3b8']]
   return (
     <div className="tl">
       <div className="tl-ctrl">
@@ -54,8 +54,8 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
           {ticks.map((a) => (
             <rect key={a.id} x={x(a.t1) - 0.8} y={16} width={1.6} height={8 + (a.score / 100) * 10} fill={typ(a.typ).color} opacity={a.t1 <= t ? 1 : 0.35} />
           ))}
-          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#7a1f33" strokeWidth="2" />
-          <circle cx={x(t)} cy={H - 6} r="6" fill="#7a1f33" stroke="#e1ddd6" strokeWidth="2" />
+          <line x1={x(t)} x2={x(t)} y1={0} y2={H} stroke="#2f7a74" strokeWidth="2" />
+          <circle cx={x(t)} cy={H - 6} r="6" fill="#2f7a74" stroke="#e1ddd6" strokeWidth="2" />
         </svg>
       </div>
       <div className="speed">
