@@ -263,3 +263,17 @@ input[type='range']::-webkit-slider-thumb { -webkit-appearance: none; width: 18p
 .app.present .inbox-toggle, .app.present .board-wrap .wys { display: none; }
 .present-exit { position: absolute; top: 12px; left: 12px; z-index: 40; opacity: 0.55; transition: opacity 0.2s; }
 .present-exit:hover { opacity: 1; }
+
+/* the side panel (case file / what-if / plant ring) collapses too */
+.app.no-drawer { --drawer-w: 0px; }
+.app.no-drawer .right { opacity: 0; pointer-events: none; border-right-width: 0; }
+.right { transition: opacity 0.25s ease; }
+.drawer-toggle { top: 340px; left: calc(var(--inbox-w) + var(--drawer-w)); }
+.drawer-toggle .vt { letter-spacing: 0.12em; }
+
+/* slim collapse tabs live in a 30px gutter inside the side panel, so they never cover content */
+.inbox-toggle { width: 30px; padding: 12px 0; align-items: center; }
+.right { padding-left: 30px; padding-right: 30px; }
+.drawer-toggle { left: calc(var(--inbox-w) + var(--drawer-w) - 30px); }
+.app.no-drawer .drawer-toggle { left: var(--inbox-w); }
+.app.no-drawer .right { padding-left: 0; padding-right: 0; }

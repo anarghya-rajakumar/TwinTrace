@@ -43,6 +43,8 @@ export default function App() {
   const [focusSet, setFocusSet] = useState(null)
   const [tab, setTab] = useState(() => { try { const t = localStorage.getItem('tt-tab'); return ['case', 'lab', 'plant'].includes(t) ? t : 'case' } catch (e) { return 'case' } })
   const [present, setPresent] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(true)
+  const openTab = (t) => { setTab(t); setDrawerOpen(true) }
   useEffect(() => { try { localStorage.setItem('tt-tab', tab) } catch (e) { /* ignore */ } }, [tab])
   const [leftOpen, setLeftOpen] = useState(false)   // the inbox starts collapsed and is never auto-opened
   const [rebooting, setRebooting] = useState(false)
@@ -124,12 +126,13 @@ export default function App() {
       else if (present) setPresent(false)
       else if (selectedId) clearSel()
     } else if (k === 'i') setLeftOpen((v) => !v)
-    else if (k === '1') setTab('case')
-    else if (k === '2') setTab('lab')
-    else if (k === '3') setTab('plant')
+    else if (k === 'd') setDrawerOpen((v) => !v)
+    else if (k === '1') openTab('case')
+    else if (k === '2') openTab('lab')
+    else if (k === '3') openTab('plant')
     else if (k === 'p') setPresent((v) => !v)
     else if (k === '?' || (k === '/' && e.shiftKey)) {
-      pushToast('<b>Shortcuts</b> · Space play · I inbox · 1 case file · 2 what-if · 3 plant · P present mode · Esc close', COLORS.cyan, '⌨', 7000)
+      pushToast('<b>Shortcuts</b> · Space play · I inbox · D side panel · 1 case file · 2 what-if · 3 plant · P present mode · Esc close', COLORS.cyan, '⌨', 7000)
     }
   }
   useEffect(() => {
@@ -161,7 +164,7 @@ export default function App() {
     if (tRef.current < a.t1) seek(Math.min(board.days, a.t1 + 0.01))
     setSelectedId(a.id)
     setFocusSet(new Set(a.acc))
-    setTab('case')
+    openTab('case')
     if (zoom && boardRef.current) boardRef.current.zoomToAlert(a.i)
   }
   const clearSel = () => { setSelectedId(null); setFocusSet(null) }
@@ -253,8 +256,8 @@ export default function App() {
         setTrace(node.id)
       }
       if (i === 4) { setTrace(null); clearSel(); setShowTruth(true); boardRef.current.fit() }
-      if (i === 5) { setShowTruth(false); setTab('plant') }
-      if (i === 6) setTab('lab')
+      if (i === 5) { setShowTruth(false); openTab('plant') }
+      if (i === 6) openTab('lab')
     },
   }
   useEffect(() => { if (tour >= 0) act.current.run(tour) }, [tour])
@@ -265,12 +268,16 @@ export default function App() {
 
   const sel = selectedId && board.alerts.find((a) => a.id === selectedId)
   return (
-    <div className={'app' + (leftOpen ? '' : ' no-left') + (present ? ' present' : '')}>
+    <div className={'app' + (leftOpen ? '' : ' no-left') + (drawerOpen ? '' : ' no-drawer') + (present ? ' present' : '')}>
       <TopBar metrics={metrics} base={board.methods.rule_baseline} alertsFired={firedCount} filters={filters} setFilters={setFilters}
-        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => { setPresent(false); setTour(0) }} onPresent={() => setPresent(true)} tab={tab} setTab={setTab} injected={injected}
+        showTruth={showTruth} setShowTruth={setShowTruth} onPick={pick} onTour={() => { setPresent(false); setLeftOpen(true); setDrawerOpen(true); setTour(0) }} onPresent={() => setPresent(true)} tab={tab} setTab={openTab} injected={injected}
         onLogo={() => { setRebooting(true); setTimeout(() => window.location.reload(), 1050) }} />
       <button className="inbox-toggle" onClick={() => setLeftOpen(!leftOpen)} aria-expanded={leftOpen} title={(leftOpen ? 'Collapse' : 'Open') + ' the alert inbox (I)'}>
         <span className="chev">{leftOpen ? '◀' : '▶'}</span><span className="vt">Alert inbox</span><span className="badge">{firedCount}</span>
+      </button>
+      <button className="inbox-toggle drawer-toggle" onClick={() => setDrawerOpen(!drawerOpen)} aria-expanded={drawerOpen}
+        title={(drawerOpen ? 'Collapse' : 'Open') + ' the case file / what-if / plant panel (D)'}>
+        <span className="chev">{drawerOpen ? '◀' : '▶'}</span><span className="vt">Case · What-if · Plant</span>
       </button>
       <div className="left">
         <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
@@ -329,9 +336,9 @@ export default function App() {
       </div>
       <div className="right">
         <div className="tabs">
-          <button className={tab === 'case' ? 'on' : ''} onClick={() => setTab('case')} title="Case file (1)">⚑ Case file</button>
-          <button className={tab === 'lab' ? 'on' : ''} onClick={() => setTab('lab')} title="What-if lab (2)">⚙ What-if lab</button>
-          <button className={tab === 'plant' ? 'on' : ''} onClick={() => setTab('plant')} title="Plant a ring (3)">＋ Plant ring</button>
+          <button className={tab === 'case' ? 'on' : ''} onClick={() => openTab('case')} title="Case file (1)">⚑ Case file</button>
+          <button className={tab === 'lab' ? 'on' : ''} onClick={() => openTab('lab')} title="What-if lab (2)">⚙ What-if lab</button>
+          <button className={tab === 'plant' ? 'on' : ''} onClick={() => openTab('plant')} title="Plant a ring (3)">＋ Plant ring</button>
         </div>
         <div className="drawer-body" key={tab + (tab === 'case' ? selectedId : '')}>
           {tab === 'case' && (
@@ -343,7 +350,7 @@ export default function App() {
             shown={board.alerts.filter((a) => a.score >= thr[a.grp]).length} total={board.alerts.length} accounts={board.n_accounts} />}
           {tab === 'plant' && (
             <PlantPanel day={t} onPlant={onPlant} onWatch={watch} onOpenAlert={openAlertById} injected={injected} onClear={clearPlanted}
-              onLower={(res) => { lowerFor(res.closest.layer === 'money' ? 'money' : 'trade', res.closest.score); setTab('lab') }} />
+              onLower={(res) => { lowerFor(res.closest.layer === 'money' ? 'money' : 'trade', res.closest.score); openTab('lab') }} />
           )}
         </div>
       </div>
