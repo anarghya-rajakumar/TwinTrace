@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from './api'
 import { COLORS, typ } from './util'
 import Board from './components/Board.jsx'
-import Board3D from './components/Board3D.jsx'
+import BoardGlobe from './components/BoardGlobe.jsx'
 import TopBar from './components/TopBar.jsx'
 import Timeline from './components/Timeline.jsx'
 import AlertList from './components/AlertList.jsx'
@@ -251,15 +251,15 @@ export default function App() {
         <AlertList board={board} thr={thr} t={t} selectedId={selectedId} onSelect={(a) => selectAlert(a)} typFilter={typFilter} setTypFilter={setTypFilter} playing={playing} />
       </div>
       <div className="board-wrap">
-        <WhatYouSee kind="board" />
+        <WhatYouSee kind="board" globe={view3d} />
         <div className="board-stage">
         {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
-        {React.createElement(view3d ? Board3D : Board, { key: boardKey + (view3d ? 'd3' : 'd2'), ref: boardRef, orbit, board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
+        {React.createElement(view3d ? BoardGlobe : Board, { key: boardKey + (view3d ? 'g' : 'd2'), ref: boardRef, orbit, onAlertClick: (ai) => selectAlert(board.alerts[ai]), board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
         <Toasts items={toasts} />
         <div className="hud-tr">
-          <div className="seg" title="Flat network, or two stacked layers (bank below, trading above)">
+          <div className="seg" title="Flat network of accounts, or a globe with one point per flagged ring">
             <button className={!view3d ? 'on' : ''} onClick={() => view3d && switchView(false)}>2D</button>
-            <button className={view3d ? 'on' : ''} onClick={() => !view3d && switchView(true)}>3D</button>
+            <button className={view3d ? 'on' : ''} onClick={() => !view3d && switchView(true)}>Globe</button>
           </div>
           {view3d && <button className={'btn sm' + (orbit ? ' on' : '')} onClick={() => setOrbit(!orbit)} title="Slowly rotate the view">⟳ orbit</button>}
           <div className="seg" title="Which layer to show">
@@ -270,8 +270,17 @@ export default function App() {
           <button className="btn sm" onClick={() => { clearSel(); boardRef.current.fit() }}>⤢ fit</button>
         </div>
         <div className="legend">
-          <div><i style={{ background: '#6c93e0' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
-          <div><i style={{ background: '#ff3b5c', boxShadow: '0 0 8px #ff3b5c' }} /> flagged ring (colour = typology)</div>
+          {view3d ? (
+            <>
+              <div><i style={{ background: '#ff3b5c', boxShadow: '0 0 8px #ff3b5c' }} /> one glowing point = one flagged ring (colour = crime type)</div>
+              <div>drag to spin · click a point to open it</div>
+            </>
+          ) : (
+            <>
+              <div><i style={{ background: '#6c93e0' }} /> bank account <span style={{ marginLeft: 8 }}>◆</span> trading account</div>
+              <div><i style={{ background: '#ff3b5c', boxShadow: '0 0 8px #ff3b5c' }} /> flagged ring (colour = typology)</div>
+            </>
+          )}
           {showTruth && <div><i style={{ background: 'transparent', border: '1.5px solid #2ee59d' }} /> real ring <i style={{ background: 'transparent', border: '1.5px dashed #ff3b5c', marginLeft: 8 }} /> false alarm <i style={{ background: 'transparent', border: '1.5px dashed #ffb020', marginLeft: 8 }} /> missed</div>}
           <div>click any account to trace its money</div>
         </div>

@@ -61,7 +61,7 @@ function Sw({ c, shape = 'circle', dashed }) {
 }
 
 /** "What you are looking at": a plain-language key and story that sits directly above a network graph. */
-export default function WhatYouSee({ kind, alert, trace }) {
+export default function WhatYouSee({ kind, alert, trace, globe }) {
   const [open, setOpen] = useState(true)
   let legend, story, why, next
   if (kind === 'alert' && alert) {
@@ -95,6 +95,15 @@ export default function WhatYouSee({ kind, alert, trace }) {
       : 'We are following this account’s money, step by step, to see where it came from and where it went.'
     why = trace && trace.originAlerts ? 'It belongs to a flagged ring. Open the alert button on the right to see the reasons.' : 'This account is not part of a flagged ring on its own. It is shown so you can follow the trail.'
     next = 'Look for accounts on the left that feed many others, and on the right that pass money on within minutes. Click any account to keep following.'
+  } else if (globe) {
+    legend = (
+      <>
+        <Sw c="#ff3b5c" /> Each glowing point on the globe is <b>one flagged ring</b>, coloured by the type of crime and taller when the risk is higher. Select a ring to see its accounts (circles) and arcs showing money moving (thicker = more money). Where a ring sits on the map is made up, because our data has no locations.
+      </>
+    )
+    story = 'Each point is a group of accounts that moved money in a pattern criminals use to hide it, found among thousands of normal accounts.'
+    why = 'A ring is flagged when its pattern is very close to a known laundering shape and scores high on risk (the score is out of 100).'
+    next = 'Click a point to open its case file, or press play to watch rings appear over the 90 days.'
   } else {
     legend = (
       <>
