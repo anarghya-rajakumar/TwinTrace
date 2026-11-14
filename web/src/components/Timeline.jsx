@@ -30,7 +30,7 @@ export default function Timeline({ board, t, playing, speed, onToggle, onSpeed, 
     window.addEventListener('pointerup', up)
   }
   const sp = board.splits
-  const zones = [['TUNE · model learns', sp.tune, '#4f6d7a'], ['VAL', sp.val, '#bdb3a4'], ['TEST · never seen', sp.test, '#cbc3b8']]
+  const zones = [['TUNE · model learns', sp.tune, '#4d6b78'], ['VAL', sp.val, '#bdb3a4'], ['TEST · never seen', sp.test, '#cbc3b8']]
   return (
     <div className="tl">
       <div className="tl-ctrl">

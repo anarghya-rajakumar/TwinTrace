@@ -261,7 +261,7 @@ function linkColor(s, l) {
     if (!r.det.some((ai) => alertShown(s, ai))) return hexA(COLORS.amber, 0.7 * k)
   }
   if (l.kind === 2) return hexA('#635747', 0.28 * k)
-  if (l.kind === 1) return hexA('#b5703f', 0.3 * k)
+  if (l.kind === 1) return hexA('#8b6b4e', 0.3 * k)
   return hexA('#92816a', 0.22 * k)
 }
 function drawNode(s, n, ctx, gs) {
@@ -271,7 +271,7 @@ function drawNode(s, n, ctx, gs) {
   const sel = s.p.focusSet && s.p.focusSet.has(n.idx)
   ctx.save()
   ctx.globalAlpha = dim ? 0.22 : 1
-  let col = n.k === 'b' ? '#3f5f6e' : '#a8602c'
+  let col = n.k === 'b' ? '#4d6b78' : '#8b6b4e'
   let r = 2.9
   let a = null
   if (bi >= 0) {
@@ -357,7 +357,7 @@ function post(s, ctx, gs) {
     const l = links[i]
     if (l.kind === 2 || l.source.x === undefined || !linkVisible(s, l) || !activeLink(s, l, t)) continue
     const alerty = l.ai >= 0 && alertShown(s, l.ai)
-    const col = alerty ? typ(s.p.board.alerts[l.ai].typ).color : l.kind === 1 ? '#b5703f' : '#4f6d7a'
+    const col = alerty ? typ(s.p.board.alerts[l.ai].typ).color : l.kind === 1 ? '#8b6b4e' : '#4d6b78'
     for (let k = 0; k < 2; k++) {
       const p = ((now / 1000) * 0.55 + l.seed + k * 0.5) % 1
       const [x, y] = lerpPt(l, p)

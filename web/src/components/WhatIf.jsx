@@ -52,7 +52,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
           <div className="sub">trained default {defaults.money.toFixed(1)}</div>
         </div>
         <div className="slider-row">
-          <div className="top"><span title="How strict alerts are for stock trades">◆ Stock trades: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#b5703f' }}>{off(thr.trade)}</b></div>
+          <div className="top"><span title="How strict alerts are for stock trades">◆ Stock trades: how strict?</span><b style={{ fontFamily: 'var(--mono)', color: '#8b6b4e' }}>{off(thr.trade)}</b></div>
           <input type="range" min={floor} max="101" step="0.1" value={thr.trade} onChange={(e) => setThr({ ...thr, trade: +e.target.value })} />
           <div className="ends"><span>◀ More alerts: catches more, but more false alarms</span><span>Fewer alerts: fewer false alarms, but may miss some ▶</span></div>
           <div className="sub">trained default {defaults.trade.toFixed(1)} · 101 turns the layer off</div>
@@ -73,7 +73,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
             <div className="metric"><span>Precision</span><b style={{ color: '#25bb80' }}><AnimNum value={m.precision} fmt={(v) => v.toFixed(2)} /></b><small>alerts that were real</small></div>
             <div className="metric"><span>Recall</span><b style={{ color: '#7a1f33' }}><AnimNum value={m.recall} fmt={(v) => v.toFixed(2)} /></b><small>{m.found}/{m.rings} rings caught</small></div>
             <div className="metric"><span>F1</span><b><AnimNum value={m.f1} fmt={(v) => v.toFixed(2)} /></b><small>balance of both</small></div>
-            <div className="metric"><span>False alarms</span><b style={{ color: m.fpr > 0.01 ? '#d1304b' : '#d1901a' }}><AnimNum value={m.fpr * 100} fmt={(v) => v.toFixed(2) + '%'} /></b><small>innocent accts flagged</small></div>
+            <div className="metric"><span>False alarms</span><b style={{ color: m.fpr > 0.01 ? '#b0303a' : '#d1901a' }}><AnimNum value={m.fpr * 100} fmt={(v) => v.toFixed(2) + '%'} /></b><small>innocent accts flagged</small></div>
             <div className="metric"><span>Alerts</span><b><AnimNum value={m.alerts} fmt={(v) => Math.round(v)} /></b><small>in test period</small></div>
             <div className="metric"><span>Per 1,000</span><b><AnimNum value={m.per1000} fmt={(v) => v.toFixed(1)} /></b><small>rules: {rb ? rb.per1000.toFixed(0) : '–'}</small></div>
           </div>
@@ -85,7 +85,7 @@ export default function WhatIf({ thr, setThr, defaults, m, methods, loading, flo
                   <div className="sub" style={{ marginBottom: 2 }}>{l}</div>
                   <Bar label="TwinTrace" v={m[k]} color="#7a1f33" />
                   {sl && <Bar label="Bank only" v={sl[k]} color="#9c8c77" />}
-                  {rb && <Bar label="Rules" v={rb[k]} color="#d1304b" />}
+                  {rb && <Bar label="Rules" v={rb[k]} color="#b0303a" />}
                 </div>
               ))}
             </div>

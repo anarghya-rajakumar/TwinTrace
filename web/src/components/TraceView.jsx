@@ -42,7 +42,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
       .nodeLabel((n) => `<b>${n.id}</b><br/>${n.k === 'b' ? 'bank account' : 'trading account'}${n.alerts.length ? '<br/><span style="color:#d17183">⚑ ' + n.alerts.join(', ') + '</span>' : ''}<br/><span style="color:#92816a">click to follow from here</span>`)
       .nodeCanvasObject((n, ctx, gs) => draw(n, ctx, gs, dataRef.current && dataRef.current.origin))
       .nodePointerAreaPaint((n, color, ctx) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(n.x, n.y, 11, 0, 6.2832); ctx.fill() })
-      .linkColor((l) => (l.kind === 'trade' ? hexA('#b5703f', 0.55) : l.kind === 'owner' ? hexA('#635747', 0.5) : hexA('#7a1f33', 0.55)))
+      .linkColor((l) => (l.kind === 'trade' ? hexA('#8b6b4e', 0.55) : l.kind === 'owner' ? hexA('#635747', 0.5) : hexA('#7a1f33', 0.55)))
       .linkWidth((l) => (l.kind === 'owner' ? 1 : 1 + Math.log10(l.amount + 10) / 2.6))
       .linkLineDash((l) => (l.kind === 'trade' ? [4, 3] : l.kind === 'owner' ? [1, 3] : null))
       .linkDirectionalArrowLength(6)
@@ -63,7 +63,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
             const y = l.source.y + (l.target.y - l.source.y) * p
             ctx.beginPath()
             ctx.arc(x, y, 1.9, 0, 6.2832)
-            ctx.fillStyle = l.kind === 'trade' ? '#b5703f' : '#7a1f33'
+            ctx.fillStyle = l.kind === 'trade' ? '#8b6b4e' : '#7a1f33'
             ctx.shadowColor = ctx.fillStyle
             ctx.shadowBlur = 8
             ctx.fill()
@@ -177,7 +177,7 @@ export default function TraceView({ account, onClose, onOpenAlert }) {
 function draw(n, ctx, gs, origin) {
   const flagged = n.alerts.length > 0
   const isO = n.id === origin
-  const col = isO ? '#7a1f33' : flagged ? '#d1304b' : n.k === 'b' ? '#4f6d7a' : '#b5703f'
+  const col = isO ? '#7a1f33' : flagged ? '#b0303a' : n.k === 'b' ? '#4d6b78' : '#8b6b4e'
   const r = isO ? 8.5 : flagged ? 6.5 : 5
   ctx.save()
   if (isO || flagged) {

@@ -72,9 +72,9 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
       <>
         <Sw c={c} /> Circles are accounts. Lines with moving dashes are money moving, and <b>thicker lines mean more money</b>.{' '}
         <Sw c="#7a1f33" shape="diamond" /> A <b style={{ color: '#7a1f33' }}>burgundy diamond</b> is an entry point (money coming in from outside this group).{' '}
-        <Sw c="#d1304b" shape="square" /> A <b style={{ color: '#d17183' }}>red square</b> is an exit point (money leaving this group).{' '}
+        <Sw c="#b0303a" shape="square" /> A <b style={{ color: '#d17183' }}>red square</b> is an exit point (money leaving this group).{' '}
         <Sw c="#a0917c" dashed /> Grey dashed circles are outside accounts.
-        {tradey && <> <Sw c="#b5703f" /> Clay dashed lines are share trades; dotted lines link a bank account to its owner’s trading account.</>}
+        {tradey && <> <Sw c="#8b6b4e" /> Clay dashed lines are share trades; dotted lines link a bank account to its owner’s trading account.</>}
       </>
     )
     story = STORY[t] || STORY.unclassified_anomaly
@@ -86,7 +86,7 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
   } else if (kind === 'trace') {
     legend = (
       <>
-        <Sw c={COLORS.cyan} /> The big <b style={{ color: '#7a1f33' }}>burgundy</b> circle is the account you clicked. <Sw c="#4f6d7a" /> Slate circles are bank accounts and <Sw c="#b5703f" shape="diamond" /> clay diamonds are trading accounts. <Sw c="#d1304b" /> <b style={{ color: '#d17183' }}>Red</b> accounts were flagged by TwinTrace.
+        <Sw c={COLORS.cyan} /> The big <b style={{ color: '#7a1f33' }}>burgundy</b> circle is the account you clicked. <Sw c="#4d6b78" /> Slate circles are bank accounts and <Sw c="#8b6b4e" shape="diamond" /> clay diamonds are trading accounts. <Sw c="#b0303a" /> <b style={{ color: '#d17183' }}>Red</b> accounts were flagged by TwinTrace.
         Lines with moving dots are money moving, and <b>thicker lines mean more money</b> (clay dashed = share trades, dotted = same owner). Accounts on the <b>left</b> sent money in from outside this group; accounts on the <b>right</b> received money leaving it.
       </>
     )
@@ -98,7 +98,7 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
   } else if (globe) {
     legend = (
       <>
-        <Sw c="#d1304b" /> Each glowing point on the globe is <b>one flagged ring</b>, coloured by the type of crime and taller when the risk is higher. Select a ring to see its accounts (circles) and arcs showing money moving (thicker = more money). Where a ring sits on the map is made up, because our data has no locations.
+        <Sw c="#b0303a" /> Each glowing point on the globe is <b>one flagged ring</b>, coloured by the type of crime and taller when the risk is higher. Select a ring to see its accounts (circles) and arcs showing money moving (thicker = more money). Where a ring sits on the map is made up, because our data has no locations.
       </>
     )
     story = 'Each point is a group of accounts that moved money in a pattern criminals use to hide it, found among thousands of normal accounts.'
@@ -107,7 +107,7 @@ export default function WhatYouSee({ kind, alert, trace, globe }) {
   } else {
     legend = (
       <>
-        <Sw c="#4f6d7a" /> Circles are bank accounts and <Sw c="#b5703f" shape="diamond" /> diamonds are trading accounts. Faint lines are money moving (thicker = more money; dashed = share trades). <b>Glowing groups</b> are flagged rings, coloured by the type of crime. Use the replay to watch money move over time.
+        <Sw c="#4d6b78" /> Circles are bank accounts and <Sw c="#8b6b4e" shape="diamond" /> diamonds are trading accounts. Faint lines are money moving (thicker = more money; dashed = share trades). <b>Glowing groups</b> are flagged rings, coloured by the type of crime. Use the replay to watch money move over time.
       </>
     )
     story = 'Each glowing group is a set of accounts that moved money in a pattern criminals use to hide it, found among thousands of normal accounts.'
