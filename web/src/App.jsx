@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from './api'
 import { COLORS, typ } from './util'
 import Board from './components/Board.jsx'
+import Board3D from './components/Board3D.jsx'
 import TopBar from './components/TopBar.jsx'
 import Timeline from './components/Timeline.jsx'
 import AlertList from './components/AlertList.jsx'
@@ -49,6 +50,14 @@ export default function App() {
   const [typFilter, setTypFilter] = useState(new Set())
   const [tour, setTour] = useState(-1)
   const [injected, setInjected] = useState(0)
+  const [view3d, setView3d] = useState(() => { try { return localStorage.getItem('tt-view') === '3d' } catch (e) { return false } })
+  const [orbit, setOrbit] = useState(true)
+  const switchView = (v) => {
+    try { localStorage.setItem('tt-view', v ? '3d' : '2d') } catch (e) { /* ignore */ }
+    setReady(false)
+    setView3d(v)
+    setBoardKey((k) => k + 1)
+  }
   const boardRef = useRef(null)
 
   // ------------------------------------------------------------------ load
@@ -245,10 +254,14 @@ export default function App() {
         <WhatYouSee kind="board" />
         <div className="board-stage">
         {!ready && <div className="loader"><div><div className="spin" /><p>Laying out {board.nodes.length.toLocaleString()} accounts…</p></div></div>}
-        <Board key={boardKey} ref={boardRef} board={board} version={version} tRef={tRef} t={t} thr={thr} filters={filters} showTruth={showTruth} focusSet={focusSet}
-          playing={playing} onNodeClick={onNodeClick} onBackground={clearSel} onFire={onFire} onReady={() => setReady(true)} />
+        {React.createElement(view3d ? Board3D : Board, { key: boardKey + (view3d ? 'd3' : 'd2'), ref: boardRef, orbit, board, version, tRef, t, thr, filters, showTruth, focusSet, playing, onNodeClick, onBackground: clearSel, onFire, onReady: () => setReady(true) })}
         <Toasts items={toasts} />
         <div className="hud-tr">
+          <div className="seg" title="Flat network, or two stacked layers (bank below, trading above)">
+            <button className={!view3d ? 'on' : ''} onClick={() => view3d && switchView(false)}>2D</button>
+            <button className={view3d ? 'on' : ''} onClick={() => !view3d && switchView(true)}>3D</button>
+          </div>
+          {view3d && <button className={'btn sm' + (orbit ? ' on' : '')} onClick={() => setOrbit(!orbit)} title="Slowly rotate the view">⟳ orbit</button>}
           <div className="seg" title="Which layer to show">
             <button className={filters.bank ? 'on' : ''} onClick={() => setFilters({ ...filters, bank: !filters.bank })}>● Bank</button>
             <button className={filters.trade ? 'on' : ''} onClick={() => setFilters({ ...filters, trade: !filters.trade })}>◆ Trades</button>
