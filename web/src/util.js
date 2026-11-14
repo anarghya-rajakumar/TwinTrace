@@ -1,13 +1,13 @@
 export const TYP = {
-  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#d1713e', glyph: '⇶' },
-  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#d19f29', glyph: '⇉' },
-  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#d1b162', glyph: '⇉' },
-  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#d13f73', glyph: '↻' },
-  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#d1304b', glyph: '⛓' },
-  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#b5703f', glyph: '⟳' },
-  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#b5703f', glyph: '⇅' },
-  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#aa9c8a', glyph: '⛛' },
-  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#766855', glyph: '◇' },
+  fan_out: { label: 'Dispersion', long: 'Fan-out dispersion', color: '#e0561f', glyph: '⇶' },
+  fan_in_structuring: { label: 'Structuring', long: 'Fan-in with structuring', color: '#d99a00', glyph: '⇉' },
+  fan_in: { label: 'Aggregation', long: 'Fan-in aggregation', color: '#a8861a', glyph: '⇉' },
+  round_trip: { label: 'Round-trip', long: 'Round-tripping', color: '#c2185b', glyph: '↻' },
+  mule_chain: { label: 'Mule chain', long: 'Mule / pass-through chain', color: '#d32f2f', glyph: '⛓' },
+  wash_trading: { label: 'Wash trading', long: 'Wash / circular trading', color: '#6a3fa0', glyph: '⟳' },
+  loss_booking: { label: 'Loss-booking', long: 'Loss-booking / non-genuine trades', color: '#0f7b8a', glyph: '⇅' },
+  market_layering: { label: 'Market layering', long: 'Layering through the market', color: '#2f5fa8', glyph: '⛛' },
+  unclassified_anomaly: { label: 'Anomaly', long: 'Unclassified anomalous cluster', color: '#6b6258', glyph: '◇' },
 }
 export const typ = (k) => TYP[k] || TYP.unclassified_anomaly
 

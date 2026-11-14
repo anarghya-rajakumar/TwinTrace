@@ -13,7 +13,7 @@ function sprite(col) {
     const x = c.getContext('2d')
     const g = x.createRadialGradient(32, 32, 0, 32, 32, 32)
     g.addColorStop(0, hexA(col, 0.95))
-    g.addColorStop(0.28, hexA(col, 0.5))
+    g.addColorStop(0.3, hexA(col, 0.28))
     g.addColorStop(1, hexA(col, 0))
     x.fillStyle = g
     x.fillRect(0, 0, 64, 64)
@@ -271,13 +271,13 @@ function drawNode(s, n, ctx, gs) {
   const sel = s.p.focusSet && s.p.focusSet.has(n.idx)
   ctx.save()
   ctx.globalAlpha = dim ? 0.22 : 1
-  let col = n.k === 'b' ? '#4f6d7a' : '#b5703f'
-  let r = 2.6
+  let col = n.k === 'b' ? '#3f5f6e' : '#a8602c'
+  let r = 2.9
   let a = null
   if (bi >= 0) {
     a = s.p.board.alerts[bi]
     col = typ(a.typ).color
-    r = 3 + (a.score / 100) * 2.6
+    r = 4.2 + (a.score / 100) * 3
   } else if (miss) {
     col = COLORS.amber
     r = 3.2
@@ -295,12 +295,13 @@ function drawNode(s, n, ctx, gs) {
     } else ctx.arc(n.x, n.y, rad, 0, 6.2832)
   }
   if (bi >= 0 || sel) {
-    const R = (r + 3) * 2.6
+    const R = (r + 3) * 1.9
     ctx.drawImage(sprite(col), n.x - R, n.y - R, 2 * R, 2 * R)
   }
   path(r)
   ctx.fillStyle = col
   ctx.fill()
+  if (bi >= 0) { ctx.lineWidth = 1.6; ctx.strokeStyle = '#fbf8f1'; ctx.setLineDash([]); ctx.stroke() }   // light rim so flagged accounts pop on the paper background
   if (s.p.showTruth && a) {
     path(r + 2.4)
     ctx.lineWidth = 1.1
@@ -316,7 +317,7 @@ function drawNode(s, n, ctx, gs) {
   if (sel) {
     path(r + 1)
     ctx.lineWidth = 1.2
-    ctx.strokeStyle = '#fff'
+    ctx.strokeStyle = '#2b2622'
     ctx.setLineDash([])
     ctx.stroke()
   }

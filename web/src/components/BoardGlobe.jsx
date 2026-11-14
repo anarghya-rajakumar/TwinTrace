@@ -54,7 +54,7 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
       .polygonSideColor(() => 'rgba(140,125,95,0.25)')
       .polygonStrokeColor(() => 'rgba(120,105,80,0.55)')
       .polygonAltitude(0.004)
-      .pointLat('lat').pointLng('lng').pointAltitude('alt').pointRadius('r').pointColor('color').pointResolution(10)
+      .pointLat('lat').pointLng('lng').pointAltitude('alt').pointRadius('r').pointColor('color').pointResolution(14)
       .pointLabel((d) => d.label)
       .onPointClick((d) => {
         if (d.kind === 'ring') s.p.onAlertClick && s.p.onAlertClick(d.ai)
@@ -110,8 +110,8 @@ const BoardGlobe = forwardRef(function BoardGlobe(props, ref) {
         const l = locOf(s, a.id)
         const base = typ(a.typ).color
         const col = p.showTruth ? (a.hit ? COLORS.green : COLORS.red) : base
-        return { kind: 'ring', ai: i, lat: l.lat, lng: l.lng, alt: 0.004 + (a.score / 100) * 0.018 + (selAi === i ? 0.02 : 0), r: 0.28 + (a.score / 100) * 0.3 + (selAi === i ? 0.3 : 0),
-          color: sel && selAi !== i ? hexA(col, 0.25) : col,
+        return { kind: 'ring', ai: i, lat: l.lat, lng: l.lng, alt: 0.01 + (a.score / 100) * 0.03 + (selAi === i ? 0.02 : 0), r: 0.5 + (a.score / 100) * 0.45 + (selAi === i ? 0.3 : 0),
+          color: sel && selAi !== i ? hexA(col, 0.3) : col,
           label: `<div class="graph-tooltip"><b style="color:${base}">${typ(a.typ).label}</b> · ${a.id}<br/>risk ${a.score.toFixed(0)} · ${a.n} accounts<br/><span style="color:#92816a">click to open the case file</span></div>` }
       })
       missed.forEach((r) => {
