@@ -1,0 +1,96 @@
+# TwinTrace configuration. Everything is deterministic given `seed`.
+seed: 42
+sample_accounts: 20000        # active bank accounts in the organic background
+n_background_tx: 100000       # organic transfers (IBM slice or IBM-format synthetic)
+n_days: 90
+start_date: "2025-01-01"
+threshold_inr: 50000          # reporting threshold that structuring tries to stay under
+noise_level: 1.0              # scales organic noise: near-threshold honest payments, honest bursts
+timing_jitter: 1.0            # scales how spread out ring activity is in time
+stealth: 0.6                  # 0..1: how hard rings try to evade naive rules (sub-threshold pieces, dilution)
+
+ring_size:                    # [min, max] accounts/hops per typology
+  fan_out: [8, 25]            # recipients
+  fan_in: [8, 25]             # senders
+  round_trip: [3, 6]          # hops
+  mule_chain: [4, 8]          # hops
+  wash_trading: [3, 8]        # accounts
+  loss_booking: [2, 2]        # accounts
+  bridge: [3, 6]              # trading accounts
+
+ring_counts:                  # planted rings per typology (ground truth)
+  fan_out: 40
+  fan_in: 40
+  round_trip: 40
+  mule_chain: 40
+  wash_trading: 40
+  loss_booking: 40
+  bridge: 40
+hard_negative_counts:
+  payroll_fanout: 12
+  rent_fanin: 12
+  shop_settlement: 12
+  family_circular: 12
+  market_maker: 8
+  legit_repeat_pair: 40
+
+data:
+  ibm_trans: data/raw/HI-Small_Trans.csv
+  ibm_patterns: data/raw/HI-Small_Patterns.txt
+  usd_to_inr: 83.0
+  use_yfinance: false          # off by default so runs are reproducible; prices are cached when on
+  tickers:                     # anonymised symbols; proxies only supply the *shape* of a price path
+    LRGA: {kind: liquid,   start_price: 1450.0, proxy: "^NSEI"}
+    LRGB: {kind: liquid,   start_price: 1620.0, proxy: "^NSEBANK"}
+    LRGC: {kind: liquid,   start_price: 1880.0, proxy: "^CNXIT"}
+    SMLX: {kind: illiquid, start_price: 74.0,   proxy: "^CNXSC"}
+    SMLY: {kind: illiquid, start_price: 41.0,   proxy: "^CNXSC"}
+  n_background_trades: 36000
+  demat_share: 0.30            # share of owners that also hold a demat account
+
+splits:                        # fractions of the 90-day window (time-based only)
+  tune: 0.6
+  val: 0.2
+  test: 0.2
+
+graph:
+  window_hours: 72
+  stride_hours: 24
+  trade_window_hours: 168
+  trade_stride_hours: 48
+  min_cluster_size: 3
+  max_cluster_size: 80
+
+detectors:
+  fan_min_counterparties: 6
+  structuring_min_tx: 5
+  structuring_band: [0.9, 1.0]   # share of the threshold
+  roundtrip_max_len: 6
+  roundtrip_min_retention: 0.80
+  roundtrip_max_hours: 72
+  passthrough_min_ratio: 0.85
+  passthrough_max_dwell_hours: 8
+  passthrough_min_amount: 20000
+  recurrence_gap_hours: 1
+  wash_min_trades: 6
+  wash_min_internal_share: 0.5
+  loss_min_trades: 4
+  loss_min_deviation: 0.10
+  funding_lookback_days: 14
+  exit_lookahead_days: 4
+
+scoring:
+  target_fpr: 0.01              # ceiling on flagged innocent accounts / innocent accounts, split across layer groups; chosen on validation (5 seeds)
+  xgb: {n_estimators: 150, max_depth: 3, learning_rate: 0.05, max_scale_pos_weight: 5}
+  f1_tolerance: 0.03            # threshold = lowest one whose validation F1 is within this of the best
+  weight_search_iters: 400
+
+baseline:                       # rule baseline parameters
+  max_tx_per_day: 12
+  structuring_min_deposits: 5
+  structuring_window_hours: 48
+  volume_spike_multiple: 3.0
+  large_order_qty_multiple: 4.0
+
+eval:
+  match_fraction: 0.5
